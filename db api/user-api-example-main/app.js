@@ -76,6 +76,10 @@ app.get('/registrarMascotaPrueba', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'registrarMascotaPrueba.html'));
 });
 
+app.get('/registrar_adopcion', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'registrar_adopcion.html'));
+});
+
 app.get('/mis_reportes_usuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'mis_reportes_usuario.html'));
 });
