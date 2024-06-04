@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="/public/css/estilo.css">
+</head>
+<body>
+    <div class="contenedor">
+        <div class="formulario">
+            <form method="post" action="/register">
+                <h4>Nombre(s)</h4>
+                <input type="text" name="nombre" required>
+
+                <h4>Apellido paterno</h4>
+                <input type="text" name="apellido_paterno" required>
+                
+                <h4>Apellido materno</h4>
+                <input type="text" name="apellido_materno" required>
+
+                <h4>Teléfono</h4>
+                <input type="tel" name="telefono" required>
+
+                <h4>Correo electrónico</h4>
+                <input type="email" name="email" required>
+                
+                <h4>Contraseña</h4>
+                <input type="password" name="password" required>
+
+                <h4>Colonia</h4>
+                <input type="text" name="colonia" required>
+
+                <h4>Calle</h4>
+                <input type="text" name="calle" required>
+
+                <h4>Ciudad</h4>
+                <input type="text" name="ciudad" required>
+
+                <h4>Código postal</h4>
+                <input type="number" name="cp" required>
+
+                <h4>Fecha de nacimiento</h4>
+                <input type="date" name="fecha_nacimiento" required>
+
+                <div class="col-md-12 text-center">
+                    <div class="mb-3">
+                        <button type="submit">Registrarse</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
