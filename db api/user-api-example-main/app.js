@@ -18,6 +18,7 @@ const loginRouter = require('./viewsJS/login');
 const registroRouter = require('./viewsJS//registro');
 const reportesRouter = require('./viewsJS/reportes');
 const registrarMascota = require('./viewsJS/mascota');
+const registrarAdopcion = require('./viewsJS/realizar_adopcion');
 
 const misReportesUsuario = require('./viewsJS/mis_reportes_usuario');
 
@@ -122,6 +123,7 @@ app.use(loginRouter);
 app.use(registroRouter);
 app.use(reportesRouter);
 app.use(registrarMascota);
+app.use(registrarAdopcion);
 
 
 

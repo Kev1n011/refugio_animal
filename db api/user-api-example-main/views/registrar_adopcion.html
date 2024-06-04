@@ -18,17 +18,77 @@
                     <div class="card-body">
                         <form action="/registrar_adopcion" method="POST">
                             <label for="listaMascotas" class="form-label">Selecciona la mascota:</label>
-                            <select class="form-select" id="lista_mascotas" name="lista_mascotas" onchange="this.form.submit()">
-                                <option value="Perro">Perro</option>
-                                <option value="Gato">Gato</option>
-                                <option value="Zorro" >Zorro</option>
+                            <select class="form-select" id="lista_mascotas" name="lista_mascotas" required>
                             </select>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre del cliente</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="domicilio" class="form-label">Domicilio del cliente</label>
+                                <input type="text" class="form-control" id="domicilio" name="domicilio" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Telefono del cliente</label>
+                                <input type="number" class="form-control" id="telefono" name="telefono" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="referencias" class="form-label">Referencias del cliente</label>
+                                <textarea class="form-control" id="referencias" name="referencias" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="motivo" class="form-label">Motivo de adopcion</label>
+                                <textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fecha_adopcion" class="form-label">Fecha de adopción</label>
+                                <input type="date" name="fecha_adopcion" required>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Registrar adopción</button>
+                            </div>
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Función para cargar las opciones del dropdown con las mascotas
+        function cargarMascotas() {
+            // Realizar una solicitud AJAX para obtener las mascotas
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/v1/mascotas', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var mascotas = JSON.parse(xhr.responseText).datos.mascotas;
+                        var selectMascotas = document.getElementById('lista_mascotas');
+                        // Limpiar las opciones existentes del dropdown
+                        selectMascotas.innerHTML = '';
+                        // Llenar el dropdown con las nuevas opciones
+                        mascotas.forEach(function(mascota) {
+                            var option = document.createElement('option');
+                            option.value = mascota.id;
+                            option.textContent = mascota.nombre + ' (' + mascota.tipo + ')';
+                            selectMascotas.appendChild(option);
+                        });
+                    } else {
+                        console.error('Error al cargar las mascotas:', xhr.statusText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // Llamar a la función para cargar las mascotas cuando la página se cargue
+        window.onload = function() {
+            cargarMascotas();
+        };
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

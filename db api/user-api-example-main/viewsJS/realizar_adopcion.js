@@ -1,26 +1,40 @@
 const express = require ('express')
+const bodyParser = require('body-parser');
 const adopcion = require ('../models/adopcion')
+const mascota1 = require("../models/mascotas");
 const router = express.Router();
-
-router = express.Router()
+router.use(bodyParser.urlencoded({ extended: true }));
 
 router.post('/registrar_adopcion', (req, res) => {
-    const {nombre_cliente, domicilio_cliente, telefono_cliente, referencias, motivo_adopcion, fecha_adopcion, 
-           nombre_mascota} = req.body
+    const {nombre, domicilio, telefono, referencias, motivo, fecha_adopcion, lista_mascotas} = req.body
 
-    const nuevaAdopcion = {
-        nombre_cliente: nombre_cliente,
-        domicilio_cliente: domicilio_cliente,
-        telefono_cliente: telefono_cliente,
-        referencias: referencias,
-        motivo_adopcion: motivo_adopcion,
-        fecha_adopcion: fecha_adopcion,
-        nombre_mascota: nombre_mascota
+    mascota1.getUserById(lista_mascotas, (err, mascotaInfo) => {
+        if (err) {
+            console.error('Error al obtener el nombre de la mascota:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        const nombreMascota = mascotaInfo.nombre;
 
-    }
-    adopcion.createUser(nuevaAdopcion, (err) => {
-        res.redirect('/inicio_usuario')
-    })
+        const nuevaAdopcion = {
+            nombreCliente: nombre,
+            domicilioCliente: domicilio,
+            telefonoCliente: telefono,
+            referencias: referencias,
+            motivoAdopcion: motivo,
+            fechaAdopcion: fecha_adopcion,
+            nombreMascota: nombreMascota
+        }
+        adopcion.createUser(nuevaAdopcion, (err, result) => {
+            if (err) {
+                console.error('Error al registrar la adopción', err);
+                res.status(500).send('Error interno del servidor');
+                return;
+            }
+            res.redirect('/inicio_usuario')
+        })
+    });
+
 })
 
 
