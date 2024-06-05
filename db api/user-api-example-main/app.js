@@ -19,6 +19,8 @@ const registroRouter = require('./viewsJS//registro');
 const reportesRouter = require('./viewsJS/reportes');
 const registrarMascota = require('./viewsJS/mascota');
 const registrarAdopcion = require('./viewsJS/realizar_adopcion');
+const registrarVacuna = require('./viewsJS/realizar_vacuna');
+const registrarCastracion = require('./viewsJS/realizar_castracion');
 
 const misReportesUsuario = require('./viewsJS/mis_reportes_usuario');
 
@@ -81,6 +83,14 @@ app.get('/registrar_adopcion', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'registrar_adopcion.html'));
 });
 
+app.get('/registrar_vacuna', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'registrar_vacuna.html'));
+});
+
+app.get('/registrar_castracion', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'registrar_castracion.html'));
+});
+
 app.get('/mis_reportes_usuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'mis_reportes_usuario.html'));
 });
@@ -124,7 +134,8 @@ app.use(registroRouter);
 app.use(reportesRouter);
 app.use(registrarMascota);
 app.use(registrarAdopcion);
-
+app.use(registrarVacuna);
+app.use(registrarCastracion);
 
 
 // Iniciar el servidor
