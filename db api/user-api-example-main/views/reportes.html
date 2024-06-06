@@ -98,6 +98,7 @@
             <input type="text" class="form-control" id="cp" name="cp">
           </div>
         </div>
+        <input type="hidden" id="correoUsuario" name="correo">
         <button type="submit" class="btn btn-primary">Enviar Reporte</button>
 
      </form>
@@ -110,6 +111,7 @@
     
         var nombreMascota = $('#nombre').val();
         var tipoMascota = $('#tipo').val(); // Get the value of the 'tipo' input
+
     
         $.ajax({
           url: '/registrar_mascota', // Replace with your actual server-side script URL
@@ -133,56 +135,70 @@
     
     </script>
 
+  <script>
+      
+
+      document.getElementById('tipoReporte').addEventListener('change', function() {
+          if (this.value === 'perdida') {
+              document.getElementById('direccionSection').style.display = 'block';
+              cargarMascotas();
+
+
+          } else {
+              document.getElementById('direccionSection').style.display = 'none';
+              cargarMascotas();
+
+          }
+      });
+
+      
+  </script>
+  <script>
+      // Función para cargar las opciones del dropdown con las mascotas
+      function cargarMascotas() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/v1/mascotas', true);
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status === 200) {
+                  var mascotas = JSON.parse(xhr.responseText).datos.mascotas;
+                  var inputMascotaId = document.getElementById('mascota_id');
+                  var inputMascotaInfo = document.getElementById('mascota_info');
+
+                  if (mascotas.length > 0) {
+                      var ultimaMascota = mascotas[mascotas.length - 1]; // Obtener la última mascota
+                      inputMascotaId.value = ultimaMascota.id; // Establecer el id de la mascota
+                      inputMascotaInfo.value = ultimaMascota.nombre + ' (' + ultimaMascota.tipo + ')'; // Mostrar nombre y tipo
+                  }
+              } else {
+                  console.error('Error al cargar las mascotas:', xhr.statusText);
+              }
+          }
+      };
+      xhr.send();
+  }
+
+  // Llamar a la función para cargar las mascotas cuando la página se cargue
+  window.onload = function() {
+  cargarMascotas();
+  };
+  </script>
+
 <script>
-    
-
-    document.getElementById('tipoReporte').addEventListener('change', function() {
-        if (this.value === 'perdida') {
-            document.getElementById('direccionSection').style.display = 'block';
-            cargarMascotas();
-
-
-        } else {
-            document.getElementById('direccionSection').style.display = 'none';
-            cargarMascotas();
-
-        }
-    });
-
-    
-</script>
-<script>
-    // Función para cargar las opciones del dropdown con las mascotas
-    function cargarMascotas() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/v1/mascotas', true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                var mascotas = JSON.parse(xhr.responseText).datos.mascotas;
-                var inputMascotaId = document.getElementById('mascota_id');
-                var inputMascotaInfo = document.getElementById('mascota_info');
-
-                if (mascotas.length > 0) {
-                    var ultimaMascota = mascotas[mascotas.length - 1]; // Obtener la última mascota
-                    inputMascotaId.value = ultimaMascota.id; // Establecer el id de la mascota
-                    inputMascotaInfo.value = ultimaMascota.nombre + ' (' + ultimaMascota.tipo + ')'; // Mostrar nombre y tipo
-                }
-            } else {
-                console.error('Error al cargar las mascotas:', xhr.statusText);
-            }
-        }
-    };
-    xhr.send();
-}
-
-// Llamar a la función para cargar las mascotas cuando la página se cargue
-window.onload = function() {
-cargarMascotas();
-};
-</script>
-
-
+  document.addEventListener('DOMContentLoaded', function() {
+      $.ajax({
+          url: '/get-user-email',
+          method: 'GET',
+          success: function(response) {
+              document.getElementById('correoUsuario').value = response.email;
+              console.log('Correo electrónico del usuario recuperado con éxito:', response.email);
+          },
+          error: function() {
+              console.error('No se pudo recuperar el correo electrónico del usuario');
+          }
+      });
+  });
+  </script>
 
 
 </body>

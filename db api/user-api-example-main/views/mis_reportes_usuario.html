@@ -13,6 +13,7 @@
     </style>
 </head>
 <body>
+    <input type="hidden" id="correoUsuario" name="correo">
     <div class="container mt-5">
         <h1 class="text-center">Mis Reportes de Pérdidas</h1>
         <div class="row justify-content-center">
@@ -58,46 +59,43 @@
         </div>
     </div>
 
+
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            fetch(`/api/v1/reportePerdidas`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Error al obtener los reportes de pérdidas`);
-                    }
-                    return response.json();
-                })
+       document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get-user-email')
+                .then(response => response.json())
                 .then(data => {
-                    const reportes = data.datos.reportes;
-                    const reportesContainer = document.getElementById('reportes-container');
-    
-                    reportes.forEach((reporte, index) => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${reporte.nombre_mascota}</td>
-                            <td>${reporte.estado}</td>
-                            <td>${reporte.fecha}</td>
-                            <td>
-                                <button class="btn btn-primary" onclick="mostrarDetalles(${index})">Ver Detalles</button>
-                            </td>
-                            <!-- Las otras columnas se mantienen ocultas -->
-                            <td class="hidden-column">${reporte.descripcion}</td>
-                            <td class="hidden-column">${reporte.colonia}</td>
-                            <td class="hidden-column">${reporte.calle}</td>
-                            <td class="hidden-column">${reporte.ciudad}</td>
-                            <td class="hidden-column">${reporte.cp}</td>
-                            <td class="hidden-column">${reporte.id_mascota}</td>
-                            <td class="hidden-column" id="nombre-mascota-${index}"></td> <!-- Columna para mostrar el nombre de la mascota -->
-                        `;
-                        reportesContainer.appendChild(row);
-    
-                        // Obtener el nombre de la mascota correspondiente al reporte
-                        obtenerNombreMascota(reporte.id_mascota, index);
-                    });
+                    const correoUsuario = data.email;
+                    console.log('Correo electrónico del usuario recuperado con éxito:', correoUsuario);
+
+                    // Usamos el correo para hacer la solicitud de los reportes
+                    fetch(`/api/v1/reportePerdidas/porCorreo?correo=${encodeURIComponent(correoUsuario)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const reportes = data.datos.reportes;
+                            const reportesContainer = document.getElementById('reportes-container');
+                            reportes.forEach((reporte, index) => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${reporte.nombre_mascota}</td>
+                                    <td>${reporte.estado}</td>
+                                    <td>${reporte.fecha}</td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="mostrarDetalles(${index})">Ver Detalles</button>
+                                    </td>
+                                    <td class="hidden-column">${reporte.descripcion}</td>
+                                    <td class="hidden-column">${reporte.colonia}</td>
+                                    <td class="hidden-column">${reporte.calle}</td>
+                                    <td class="hidden-column">${reporte.ciudad}</td>
+                                    <td class="hidden-column">${reporte.cp}</td>
+                                    <td class="hidden-column">${reporte.id_mascota}</td>
+                                `;
+                                reportesContainer.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error al obtener los reportes:', error));
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error al recuperar el correo electrónico:', error));
         });
     
         // Función para obtener el nombre de la mascota correspondiente al ID
@@ -120,13 +118,13 @@
         }
     
         // Función para mostrar el modal al hacer clic en el botón
-        function mostrarDetalles(index) {
+            function mostrarDetalles(index) {
             const reportes = document.getElementById('reportes-container').getElementsByTagName('tr');
             const reporteSeleccionado = reportes[index].getElementsByTagName('td');
-    
+        
             const modalTitle = document.getElementById('detallesModalLabel');
             modalTitle.textContent = "Detalles del Reporte";
-    
+        
             const modalBody = document.getElementById('detallesModalBody');
             modalBody.innerHTML = `
                 <p><strong>Nombre:</strong> ${reporteSeleccionado[0].textContent}</p>
@@ -136,18 +134,29 @@
                 <p><strong>Descripción:</strong> ${reporteSeleccionado[4].textContent}</p>
                 <p><strong>Colonia:</strong> ${reporteSeleccionado[5].textContent}</p>
                 <p><strong>Calle:</strong> ${reporteSeleccionado[6].textContent}</p>
-                <p><strong>Ciudad:</strong> ${reporteSeleccionado[6].textContent}</p>
+                <p><strong>Ciudad:</strong> ${reporteSeleccionado[7].textContent}</p>
                 <p><strong>Código Postal:</strong> ${reporteSeleccionado[8].textContent}</p>
-                <p><strong>id de la Mascota:</strong> ${reporteSeleccionado[9].textContent}</p> <!-- Mostrar el nombre de la mascota -->
+                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[9].textContent}</p>
             `;
-    
+        
             const modal = new bootstrap.Modal(document.getElementById('detallesModal'));
             modal.show();
         }
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        console.log(email); // Usar el correo como necesites
+    });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
     
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
 

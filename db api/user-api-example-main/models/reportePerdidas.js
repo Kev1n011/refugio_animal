@@ -35,4 +35,13 @@ exports.deleteUser = (id, callback) => {
     });
 };
 
+exports.getUserByEmail = (correo, callback) => {
+    db.query('SELECT * FROM reportePerdidas WHERE correo = ?', [correo], (err, rows) => {
+        if (err) throw err;
+        return callback(null, rows);
+    });
+};
+
+
+
 

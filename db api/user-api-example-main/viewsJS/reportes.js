@@ -7,21 +7,33 @@ const mascota1 = require("../models/mascotas");
 router.use(bodyParser.urlencoded({ extended: true }));
 
 // Ruta para servir el formulario de llenar reporte
-router.get('/llenar_reporte', (req, res) => {
-    mascota1.getAllUsers((err, mascotas) => {
+router.get('/get-user-email', (req, res) => {
+    if (req.session.userEmail) {
+        res.json({ email: req.session.userEmail });
+    } else {
+        res.status(401).send('Usuario no autenticado');
+    }
+});
+
+router.get('/api/v1/reportePerdidas', (req, res) => {
+    const correoUsuario = req.query.correo; // Obtener el correo desde los parámetros de la consulta
+
+    dbPerdidas.getUserByEmail(correoUsuario, (err, reportes) => {
         if (err) {
-            console.error('Error al obtener las mascotas:', err);
+            console.error('Error al obtener los reportes:', err);
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.render('llenar_reporte', { mascotas });
+
+        res.json({ datos: { reportes } });
     });
 });
 
 // Ruta para manejar el envío del formulario
 // Ruta para manejar el envío del formulario
 router.post('/reportes', (req, res) => {
-    const { tipoReporte, mascota, descripcion, colonia, calle, ciudad, cp } = req.body;
+    const { tipoReporte, mascota, descripcion, colonia, calle, ciudad, cp, correo } = req.body;
+    console.log('Correo recibido en POST:', correo); // Verificar que se recibe correctamente
     const fecha = new Date();
 
     if (tipoReporte === 'perdida') {
@@ -41,7 +53,8 @@ router.post('/reportes', (req, res) => {
                 ciudad,
                 cp,
                 id_mascota: mascota,
-                nombre_mascota: nombreMascota // Agregamos el nombre de la mascota al reporte
+                nombre_mascota: nombreMascota,
+                correo // Agregamos el nombre de la mascota al reporte
             };
             dbPerdidas.createUser(newReport, (err, result) => {
                 if (err) {

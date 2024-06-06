@@ -31,6 +31,9 @@ router.post('/login', (req, res) => {
 
         // Las credenciales son válidas, establecer la sesión del usuario
         req.session.userId = cliente.id;
+        req.session.userEmail = email;
+        res.cookie('userEmail', email, { httpOnly: true, maxAge: 900000 }); // Ajusta las opciones según tus necesidades
+        console.log('Correo guardado en la sesión:', req.session.userEmail);
         res.redirect('/inicio_usuario');
     });
 });
