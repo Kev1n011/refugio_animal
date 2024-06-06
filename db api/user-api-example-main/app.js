@@ -111,6 +111,10 @@ app.get('/inicio_usuario', ensureAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'inicio_usuario.html'));
 });
 
+app.get('/inicio_empleado', ensureAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'inicio_empleado.html'));
+});
+
 
 
 

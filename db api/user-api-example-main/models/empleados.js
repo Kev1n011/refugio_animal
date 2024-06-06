@@ -36,3 +36,18 @@ exports.deleteUser = (id, callback) => {
 };
 
 
+exports.getUserByEmail = (email, callback) => {
+    db.query('SELECT * FROM empleados WHERE correoElectronico = ?', email, (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        if (rows.length === 0) {
+            // No se encontró ningún usuario con ese correo electrónico
+            return callback(null, null);
+        }
+        // Se encontró un usuario con ese correo electrónico
+        return callback(null, rows[0]);
+    });
+};
+
+
