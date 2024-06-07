@@ -43,8 +43,20 @@
         // Función para cargar las opciones del dropdown con las mascotas
         function cargarMascotas() {
             // Realizar una solicitud AJAX para obtener las mascotas
+            
             var xhr = new XMLHttpRequest();
+            var xhr_castracion = new XMLHttpRequest();
+            var mascotas_castracion;
             xhr.open('GET', '/api/v1/mascotas', true);
+            xhr_castracion.open('GET', '/api/v1/servicioCastracion', true);
+            xhr_castracion.onreadystatechange = function (){
+                if(xhr_castracion.readyState === XMLHttpRequest.DONE){
+                    if(xhr_castracion.status === 200){
+                        mascotas_castracion = JSON.parse(xhr_castracion.responseText).datos.servicios;
+                    }
+                }
+            };
+            xhr_castracion.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
@@ -54,10 +66,19 @@
                         selectMascotas.innerHTML = '';
                         // Llenar el dropdown con las nuevas opciones
                         mascotas.forEach(function(mascota) {
-                            var option = document.createElement('option');
-                            option.value = mascota.id;
-                            option.textContent = mascota.nombre + ' (' + mascota.tipo + ')';
-                            selectMascotas.appendChild(option);
+                            var contador = 0;
+                            mascotas_castracion.forEach(function(mascota_castrada) {
+                                if(mascota_castrada.id_mascota === mascota.id){
+                                console.log('El valor de contador es: ' + contador)
+                                contador = contador + 1;
+                                }                                   
+                            });
+                            if(contador === 0){
+                                var option = document.createElement('option');
+                                option.value = mascota.id;
+                                option.textContent = mascota.nombre + ' (' + mascota.tipo + ')';
+                                selectMascotas.appendChild(option);   
+                            }
                         });
                     } else {
                         console.error('Error al cargar las mascotas:', xhr.statusText);
@@ -65,6 +86,7 @@
                 }
             };
             xhr.send();
+            
         }
 
         // Llamar a la función para cargar las mascotas cuando la página se cargue

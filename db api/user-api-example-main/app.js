@@ -95,6 +95,9 @@ app.get('/mis_reportes_usuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'mis_reportes_usuario.html'));
 });
 
+app.get('/reportes_empleado', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'reportes_empleado.html'));
+});
 
 
 // Middleware para proteger rutas

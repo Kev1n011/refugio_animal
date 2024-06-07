@@ -105,28 +105,25 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+     $(document).ready(function() {
       $('#mascotaForm').submit(function(event) {
-        event.preventDefault(); // Prevent form submission
-    
-        var nombreMascota = $('#nombre').val();
-        var tipoMascota = $('#tipo').val(); // Get the value of the 'tipo' input
+        event.preventDefault(); // Prevenir el envío del formulario
 
-    
         $.ajax({
-          url: '/registrar_mascota', // Replace with your actual server-side script URL
+          url: '/registrar_mascota', // Reemplaza con la URL de tu script del lado del servidor
           method: 'POST',
-          data: $(this).serialize(), // Get form data
+          data: $(this).serialize(), // Obtener los datos del formulario
           success: function(response) {
             console.log("ID de la mascota:", response.id);
-            // Handle successful registration
-            $('#mascota').val(nombreMascota + ' (' + tipoMascota + ')');
-            $('#mascota_id').val(response.id); // Assuming response contains the ID of the newly registered mascota
+            // Manejar el registro exitoso
+            $('#mascota_id').val(response.id); // Suponiendo que la respuesta contiene el ID de la mascota recién registrada
+            $('#mascota_info').val($('#nombre').val() + ' (' + $('#tipo').val() + ')');
             $('#mascotaContainer').hide();
             $('#reporteContainer').show();
+            cargarMascotas(); // Cargar las mascotas después de registrar una nueva
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            // Handle errors (display error message)
+            // Manejar errores (mostrar mensaje de error)
             console.error(errorThrown);
           }
         });
@@ -136,22 +133,18 @@
     </script>
 
   <script>
-      
+    document.getElementById('tipoReporte').addEventListener('change', function() {
+        var tipoReporteSeleccionado = this.value;
+        // Cargar mascotas solo una vez por cambio
+        cargarMascotas();
 
-      document.getElementById('tipoReporte').addEventListener('change', function() {
-          if (this.value === 'perdida') {
-              document.getElementById('direccionSection').style.display = 'block';
-              cargarMascotas();
-
-
-          } else {
-              document.getElementById('direccionSection').style.display = 'none';
-              cargarMascotas();
-
-          }
-      });
-
-      
+        // Mostrar u ocultar la sección de dirección basada en el tipo de reporte
+        if (tipoReporteSeleccionado === 'perdida' || tipoReporteSeleccionado === 'maltrato') {
+            document.getElementById('direccionSection').style.display = 'block';
+        } else {
+            document.getElementById('direccionSection').style.display = 'none';
+        }
+    });
   </script>
   <script>
       // Función para cargar las opciones del dropdown con las mascotas

@@ -26,6 +26,7 @@
                             <th scope="col">Mascota</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Fecha</th>
+                            <th scope="col">Correo</th>
                             <th scope="col">Acciones</th>
                             <!-- Las otras columnas se mantienen ocultas -->
                             <th class="hidden-column">Descripción</th>
@@ -63,32 +64,24 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('/get-user-email')
+         document.addEventListener('DOMContentLoaded', function () {
+            // Solicitud para los reportes de pérdidas
+            fetch(`/api/v1/reportePerdidas`)
                 .then(response => response.json())
                 .then(data => {
-                    const correoUsuario = data.email;
-                    console.log('Correo electrónico del usuario recuperado con éxito:', correoUsuario);
-
-                    // Solicitud para los reportes de pérdidas
-                    fetch(`/api/v1/reportePerdidas/porCorreo?correo=${encodeURIComponent(correoUsuario)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const reportesPerdidas = data.datos.reportes;
-                            agregarReportesATabla(reportesPerdidas);
-                        })
-                        .catch(error => console.error('Error al obtener los reportes de pérdidas:', error));
-
-                    // Solicitud para los reportes de maltratos
-                    fetch(`/api/v1/reporteMaltratos/porCorreo?correo=${encodeURIComponent(correoUsuario)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const reportesMaltratos = data.datos.reportes;
-                            agregarReportesATablaMaltratos(reportesMaltratos);
-                        })
-                        .catch(error => console.error('Error al obtener los reportes de maltratos:', error));
+                    const reportesPerdidas = data.datos.reportes;
+                    agregarReportesATabla(reportesPerdidas);
                 })
-                .catch(error => console.error('Error al recuperar el correo electrónico:', error));
+                .catch(error => console.error('Error al obtener los reportes de pérdidas:', error));
+
+            // Solicitud para los reportes de maltratos
+            fetch(`/api/v1/reporteMaltratos`)
+                .then(response => response.json())
+                .then(data => {
+                    const reportesMaltratos = data.datos.reportes;
+                    agregarReportesATablaMaltratos(reportesMaltratos);
+                })
+                .catch(error => console.error('Error al obtener los reportes de maltratos:', error));
         });
 
         function agregarReportesATabla(reportes) {
@@ -99,6 +92,7 @@
                 <td>${reporte.nombre_mascota}</td>
                 <td>${reporte.estado}</td>
                 <td>${reporte.fecha}</td>
+                <td>${reporte.correo}</td>
                 <td>
                     <button class="btn btn-primary" onclick="mostrarDetalles(${index})">Ver Detalles</button>
                 </td>
@@ -122,6 +116,7 @@
                     <td>${reporte.nombre_mascota}</td>
                     <td>${reporte.estado}</td>
                     <td>${reporte.fecha}</td>
+                    <td>${reporte.correo}</td>
                     <td>
                         <button class="btn btn-primary" onclick="mostrarDetallesMaltratos(${index})">Ver Detalles</button>
                     </td>
@@ -145,12 +140,12 @@
                 <p><strong>Estado:</strong> ${reporteSeleccionado[1].textContent}</p>
                 <p><strong>Fecha:</strong> ${reporteSeleccionado[2].textContent}</p>
                 <!-- Muestra todas las columnas ocultas -->
-                <p><strong>Descripción:</strong> ${reporteSeleccionado[4].textContent}</p>
-                <p><strong>Colonia:</strong> ${reporteSeleccionado[5].textContent}</p>
-                <p><strong>Calle:</strong> ${reporteSeleccionado[6].textContent}</p>
-                <p><strong>Ciudad:</strong> ${reporteSeleccionado[7].textContent}</p>
-                <p><strong>Código Postal:</strong> ${reporteSeleccionado[8].textContent}</p>
-                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[9].textContent}</p>
+                <p><strong>Descripción:</strong> ${reporteSeleccionado[5].textContent}</p>
+                <p><strong>Colonia:</strong> ${reporteSeleccionado[6].textContent}</p>
+                <p><strong>Calle:</strong> ${reporteSeleccionado[7].textContent}</p>
+                <p><strong>Ciudad:</strong> ${reporteSeleccionado[8].textContent}</p>
+                <p><strong>Código Postal:</strong> ${reporteSeleccionado[9].textContent}</p>
+                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[10].textContent}</p>
             `;
 
             const modal = new bootstrap.Modal(document.getElementById('detallesModal'));
@@ -168,8 +163,8 @@
                 <p><strong>Nombre:</strong> ${reporteSeleccionado[0].textContent}</p>
                 <p><strong>Estado:</strong> ${reporteSeleccionado[1].textContent}</p>
                 <p><strong>Fecha:</strong> ${reporteSeleccionado[2].textContent}</p>
-                <p><strong>Descripción:</strong> ${reporteSeleccionado[4].textContent}</p>
-                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[5].textContent}</p>
+                <p><strong>Descripción:</strong> ${reporteSeleccionado[5].textContent}</p>
+                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[6].textContent}</p>
             `;
 
             const modal = new bootstrap.Modal(document.getElementById('detallesModal'));

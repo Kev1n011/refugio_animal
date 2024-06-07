@@ -106,10 +106,36 @@ const actualizarReporte = (req, res) => {
     });
 };
 
+const obtenerReportesPorCorreo = (req, res) => {
+    const correo = req.query.correo; // Cambiado para usar como parámetro de consulta
+    Reporte.getUserByEmail(correo, (err, reportes) => {
+        if (err) {
+            console.error('Error retrieving reports by email:', err);
+            return res.status(500).json({
+                estatus: 'error',
+                mensaje: 'Error al obtener los reportes de la base de datos'
+            });
+        }
+        if (!reportes.length) {
+            return res.status(404).json({
+                estatus: 'conexion fallida',
+                mensaje: 'No se encontraron reportes para el correo proporcionado'
+            });
+        }
+        res.status(200).json({
+            estatus: 'conexion exitosa',
+            datos: {
+                reportes: reportes
+            }
+        });
+    });
+};
+
 module.exports = {
     obtenerReportes,
     obtenerReportesPorId,
     agregarReporte,
     borrarReporte,
+    obtenerReportesPorCorreo,
     actualizarReporte
 };

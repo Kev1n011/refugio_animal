@@ -4,10 +4,12 @@ const {
      agregarReporte, 
      obtenerReportesPorId,
      borrarReporte,
+     obtenerReportesPorCorreo,
      actualizarReporte
     } = require ('./../controladores/reporteMaltratos')
 const router = express.Router();
 
+router.get('/porCorreo', obtenerReportesPorCorreo); // Cambiado para usar como parámetro de consulta
 
 router.get('/', obtenerReportes );
 

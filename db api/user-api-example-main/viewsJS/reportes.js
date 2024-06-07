@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const dbPerdidas = require('../models/reportePerdidas');
+const dbMaltratos = require('../models/reporteMaltratos');
 const mascota1 = require("../models/mascotas");
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -19,6 +20,20 @@ router.get('/api/v1/reportePerdidas', (req, res) => {
     const correoUsuario = req.query.correo; // Obtener el correo desde los parámetros de la consulta
 
     dbPerdidas.getUserByEmail(correoUsuario, (err, reportes) => {
+        if (err) {
+            console.error('Error al obtener los reportes:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+
+        res.json({ datos: { reportes } });
+    });
+});
+
+router.get('/api/v1/reportePerdidas', (req, res) => {
+    const correoUsuario = req.query.correo;
+
+    dbPerdidas.getReportsByEmail(correoUsuario, (err, reportes) => {
         if (err) {
             console.error('Error al obtener los reportes:', err);
             res.status(500).send('Error interno del servidor');
@@ -65,7 +80,36 @@ router.post('/reportes', (req, res) => {
                 res.redirect('/inicio_usuario');
             });
         });
-    } else {
+    }
+    else if (tipoReporte === 'maltrato') {
+
+        mascota1.getUserById(mascota, (err, mascotaInfo) => { // Cambia nombreMascota por mascotaInfo
+            if (err) {
+                console.error('Error al obtener el nombre de la mascota:', err);
+                res.status(500).send('Error interno del servidor');
+                return;
+            }
+            const nombreMascota = mascotaInfo.nombre; // Obtener el nombre de la mascota del objeto mascotaInfo
+            const newReport = {
+                descripcion,
+                estado: 'EN ESPERA',
+                fecha,
+                id_mascota: mascota,
+                nombre_mascota: nombreMascota,
+                correo // Agregamos el nombre de la mascota al reporte
+            };
+            dbMaltratos.createUser(newReport, (err, result) => {
+                if (err) {
+                    console.error('Error al insertar reporte de pérdida:', err);
+                    res.status(500).send('Error interno del servidor');
+                    return;
+                }
+                res.redirect('/inicio_usuario');
+            });
+        });
+       
+    }
+    else {
         res.status(400).send('Tipo de reporte no válido');
     }
 });
