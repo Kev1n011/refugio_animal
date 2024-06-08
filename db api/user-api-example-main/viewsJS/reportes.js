@@ -47,7 +47,7 @@ router.get('/api/v1/reportePerdidas', (req, res) => {
 // Ruta para manejar el envío del formulario
 // Ruta para manejar el envío del formulario
 router.post('/reportes', (req, res) => {
-    const { tipoReporte, mascota, descripcion, colonia, calle, ciudad, cp, correo } = req.body;
+    const { tipoReporte, mascota, descripcion, colonia, calle, ciudad, cp, correo, imagen_mascota } = req.body;
     console.log('Correo recibido en POST:', correo); // Verificar que se recibe correctamente
     const fecha = new Date();
 
@@ -59,6 +59,7 @@ router.post('/reportes', (req, res) => {
                 return;
             }
             const nombreMascota = mascotaInfo.nombre; // Obtener el nombre de la mascota del objeto mascotaInfo
+
             const newReport = {
                 descripcion,
                 estado: 'EN ESPERA',
@@ -69,7 +70,8 @@ router.post('/reportes', (req, res) => {
                 cp,
                 id_mascota: mascota,
                 nombre_mascota: nombreMascota,
-                correo // Agregamos el nombre de la mascota al reporte
+                correo, // Agregamos el nombre de la mascota al reporte
+                imagen_mascota
             };
             dbPerdidas.createUser(newReport, (err, result) => {
                 if (err) {
@@ -90,13 +92,15 @@ router.post('/reportes', (req, res) => {
                 return;
             }
             const nombreMascota = mascotaInfo.nombre; // Obtener el nombre de la mascota del objeto mascotaInfo
+
             const newReport = {
                 descripcion,
                 estado: 'EN ESPERA',
                 fecha,
                 id_mascota: mascota,
                 nombre_mascota: nombreMascota,
-                correo // Agregamos el nombre de la mascota al reporte
+                correo, // Agregamos el nombre de la mascota al reporte
+                imagen_mascota
             };
             dbMaltratos.createUser(newReport, (err, result) => {
                 if (err) {

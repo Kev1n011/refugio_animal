@@ -27,6 +27,7 @@
                             <th scope="col">Estado</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Correo</th>
+                            <th scope="col">Imagen</th>
                             <th scope="col">Acciones</th>
                             <!-- Las otras columnas se mantienen ocultas -->
                             <th class="hidden-column">Descripción</th>
@@ -64,7 +65,7 @@
     </div>
 
     <script>
-         document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             // Solicitud para los reportes de pérdidas
             fetch(`/api/v1/reportePerdidas`)
                 .then(response => response.json())
@@ -84,26 +85,28 @@
                 .catch(error => console.error('Error al obtener los reportes de maltratos:', error));
         });
 
+
         function agregarReportesATabla(reportes) {
             const reportesContainer = document.getElementById('reportes-perdidas-container');
             reportes.forEach((reporte, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${reporte.nombre_mascota}</td>
-                <td>${reporte.estado}</td>
-                <td>${reporte.fecha}</td>
-                <td>${reporte.correo}</td>
-                <td>
-                    <button class="btn btn-primary" onclick="mostrarDetalles(${index})">Ver Detalles</button>
-                </td>
-                <td class="hidden-column">${reporte.descripcion}</td>
-                <td class="hidden-column">${reporte.colonia}</td>
-                <td class="hidden-column">${reporte.calle}</td>
-                <td class="hidden-column">${reporte.ciudad}</td>
-                <td class="hidden-column">${reporte.cp}</td>
-                <td class="hidden-column">${reporte.id_mascota}</td>
-                <td class="hidden-column">${reporte.tipo_reporte}</td> <!-- Añadir tipo de reporte -->
-                `;
+        <td>${reporte.nombre_mascota}</td>
+        <td>${reporte.estado}</td>
+        <td>${reporte.fecha}</td>
+        <td>${reporte.correo}</td>
+        <td><img src="${reporte.imagen_mascota}" alt="Imagen Mascota" style="width:50px; height:auto;"></td>
+        <td>
+            <button class="btn btn-primary" onclick="mostrarDetalles(${index})">Ver Detalles</button>
+        </td>
+        <td class="hidden-column">${reporte.descripcion}</td>
+        <td class="hidden-column">${reporte.colonia}</td>
+        <td class="hidden-column">${reporte.calle}</td>
+        <td class="hidden-column">${reporte.ciudad}</td>
+        <td class="hidden-column">${reporte.cp}</td>
+        <td class="hidden-column">${reporte.id_mascota}</td>
+        <td class="hidden-column">${reporte.tipo_reporte}</td>
+        `;
                 reportesContainer.appendChild(row);
             });
         }
@@ -113,19 +116,20 @@
             reportes.forEach((reporte, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${reporte.nombre_mascota}</td>
-                    <td>${reporte.estado}</td>
-                    <td>${reporte.fecha}</td>
-                    <td>${reporte.correo}</td>
-                    <td>
-                        <button class="btn btn-primary" onclick="mostrarDetallesMaltratos(${index})">Ver Detalles</button>
-                    </td>
-                    <td class="hidden-column">${reporte.descripcion}</td>
-                    <td class="hidden-column">${reporte.id_mascota}</td>
-                    <td class="hidden-column">${reporte.tipo_reporte}</td>
-                `;
+            <td>${reporte.nombre_mascota}</td>
+            <td>${reporte.estado}</td>
+            <td>${reporte.fecha}</td>
+            <td>${reporte.correo}</td>
+            <td><img src="${reporte.imagen_mascota}" alt="Imagen Mascota" style="width:50px; height:auto;"></td>
+            <td>
+                <button class="btn btn-primary" onclick="mostrarDetallesMaltratos(${index})">Ver Detalles</button>
+            </td>
+            <td class="hidden-column">${reporte.descripcion}</td>
+            <td class="hidden-column">${reporte.id_mascota}</td>
+            <td class="hidden-column">${reporte.tipo_reporte}</td>
+        `;
                 reportesContainer.appendChild(row);
-    });
+            });
         }
 
         function mostrarDetalles(index) {
@@ -139,13 +143,15 @@
                 <p><strong>Nombre:</strong> ${reporteSeleccionado[0].textContent}</p>
                 <p><strong>Estado:</strong> ${reporteSeleccionado[1].textContent}</p>
                 <p><strong>Fecha:</strong> ${reporteSeleccionado[2].textContent}</p>
+                <p><strong>Correo:</strong> ${reporteSeleccionado[3].textContent}</p>
+
                 <!-- Muestra todas las columnas ocultas -->
-                <p><strong>Descripción:</strong> ${reporteSeleccionado[5].textContent}</p>
-                <p><strong>Colonia:</strong> ${reporteSeleccionado[6].textContent}</p>
-                <p><strong>Calle:</strong> ${reporteSeleccionado[7].textContent}</p>
-                <p><strong>Ciudad:</strong> ${reporteSeleccionado[8].textContent}</p>
-                <p><strong>Código Postal:</strong> ${reporteSeleccionado[9].textContent}</p>
-                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[10].textContent}</p>
+                <p><strong>Descripción:</strong> ${reporteSeleccionado[6].textContent}</p>
+                <p><strong>Colonia:</strong> ${reporteSeleccionado[7].textContent}</p>
+                <p><strong>Calle:</strong> ${reporteSeleccionado[8].textContent}</p>
+                <p><strong>Ciudad:</strong> ${reporteSeleccionado[9].textContent}</p>
+                <p><strong>Código Postal:</strong> ${reporteSeleccionado[10].textContent}</p>
+                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[11].textContent}</p>
             `;
 
             const modal = new bootstrap.Modal(document.getElementById('detallesModal'));
@@ -163,8 +169,9 @@
                 <p><strong>Nombre:</strong> ${reporteSeleccionado[0].textContent}</p>
                 <p><strong>Estado:</strong> ${reporteSeleccionado[1].textContent}</p>
                 <p><strong>Fecha:</strong> ${reporteSeleccionado[2].textContent}</p>
-                <p><strong>Descripción:</strong> ${reporteSeleccionado[5].textContent}</p>
-                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[6].textContent}</p>
+                <p><strong>Correo:</strong> ${reporteSeleccionado[3].textContent}</p>
+                <p><strong>Descripción:</strong> ${reporteSeleccionado[6].textContent}</p>
+                <p><strong>ID de la Mascota:</strong> ${reporteSeleccionado[7].textContent}</p>
             `;
 
             const modal = new bootstrap.Modal(document.getElementById('detallesModal'));
