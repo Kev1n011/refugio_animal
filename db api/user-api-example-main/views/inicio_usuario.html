@@ -14,8 +14,15 @@
 </head>
 
 <body>
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-slide" style="background-image: url('../diseno/carousel/sample_08c61a402ddf600f162bfbfceaba483a.jpg');"></div>
+            <div class="carousel-slide" style="background-image: url('../diseno/carousel/Rectangle\ 2.png');"></div>
+            <div class="carousel-slide" style="background-image: url('../diseno/carousel/Rectangle\ 2.png');"></div>
+        </div>
+    </div>
 
-    <div class="menu-dashboard">
+    <div class="menu-dashboard closed">
         <!-- TOP MENU -->
         <div class="top-menu">
             <div class="logo">
@@ -94,6 +101,14 @@
             </div>
         </div>
     </div>
+    <script>
+        const menuToggle = document.querySelector('.toggle');
+        const menuDashboard = document.querySelector('.menu-dashboard');
+
+        menuToggle.addEventListener('click', () => {
+            menuDashboard.classList.toggle('closed'); // Cambia la clase para mostrar/ocultar el menú
+        });
+    </script>
 
 </body>
 
