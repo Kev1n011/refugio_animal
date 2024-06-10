@@ -1,79 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartas de Navegación</title>
-    <link href="../diseno/inicio_usuario.css" rel="stylesheet">
+    <title>Menu Dashboard</title>
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="../diseno/css/inicio_usuario.css">
+    <link rel="stylesheet" href="../diseno/css/inicio_empleado.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-   
+
+    <!-- CUSTOM JS -->
+    <script src="../diseno/menu_principal_usuario.js" defer></script>
+
+    <style>
+        font-face {
+            font-family: 'Montserrat';
+            src: url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+        }
+
+       
+    </style>
+
 </head>
+
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header bg-primary text-white">
-                        Llenar Reporte
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Haga clic en el siguiente enlace para llenar un nuevo reporte.</p>
-                        <a href="/reportes" class="btn btn-primary">Ir a Llenar Reporte</a>
-                    </div>
+   
+
+
+    <div class="wrapper">
+        
+        <div class="menu-dashboard closed">
+            <!-- TOP MENU -->
+            <div class="top-menu">
+                <div class="logo">
+                    <img src="../diseno/imagenLogo/logo.png" alt="Logo">
+                    <span>Refugio Animal</span>
+                </div>
+                <div class="toggle">
+                    <i class='bx bx-menu'></i>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header bg-primary text-white">
-                        Mis Reportes
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Haga clic en el siguiente enlace para ver sus reportes.</p>
-                        <a href="/reportes_empleado" class="btn btn-primary">Ir a Mis Reportes</a>
-                    </div>
+            
+            <!-- MENU -->
+         
+            <div class="menu">
+                <div class="enlace">
+
+                    <i class="bx bx-grid-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+
+
+
+                <div class="enlace">
+                    <a href="/reportes_empleado" style="color: inherit; text-decoration: none;">
+                        <i class='bx bxs-report' style='color:#ffffff'></i>
+                        <span>Ver reportes</span>
+
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <a href="/registro_empleado" style="color: inherit; text-decoration: none;">
+                        <i class='bx bxs-user'></i>
+                        <span>Agregar empleado</span>
+
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <a href="/logout" style="color: inherit; text-decoration: none;">
+                        <i class='bx bx-log-out' style='color:#ffffff'></i>
+                        <span>Cerrar sesión</span>
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <i class="bx bx-cog"></i>
+                    <span>Configuración</span>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="wrapper-cuadros">
+            <!-- ... -->
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 21px;">Total de Mascotas</h3>
+                    <p id="totalMascotas">Cargando...</p>
+                </div>
+            </div>
+        
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 20px;">Total de reportes de perdidas</h3>
+                    <p id="cantidadPerdidas">Cargando...</p>
+                </div>
+            </div>
+        
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 20px;">Total de reportes de maltratos</h3>
+                    <p id="cantidadMaltratos">Cargando...</p>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center mt-3">
-              
-            </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header bg-success text-white">
-                        Registrar Mascota
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Haga clic en el siguiente enlace para registrar una nueva mascota.</p>
-                        <a href="/registrarMascotaPrueba" class="btn btn-success">Registrar Mascota</a>
-                    </div>
-                </div>
 
-            </div>
+    
 
-           
-        <div class="row justify-content-center mt-3">
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header bg-danger text-white">
-                        Cerrar Sesión
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Haga clic en el siguiente enlace para cerrar sesión.</p>
-                        <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+   
+
+       
+
+     
+
+        
+
     </div>
+
+
+
+
+
+
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var userEmail = "{{email}}"; // Usando la sintaxis de plantillas para insertar el correo
-            localStorage.setItem('userEmail', userEmail);
+        const menuToggle = document.querySelector('.toggle');
+        const menuDashboard = document.querySelector('.menu-dashboard');
+
+        menuToggle.addEventListener('click', () => {
+            menuDashboard.classList.toggle('closed'); // Cambia la clase para mostrar/ocultar el menú
         });
     </script>
 
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          
+            obtenerTotalMascotas();
+            obtenerCantidadReportesMaltratos();
+            obtenerCantidadReportesPerdidas();
+        });
+        function obtenerTotalMascotas() {
+            // Hacer una solicitud al servidor para obtener el total de mascotas
+            // Aquí debes usar la ruta correcta para tu endpoint de mascotas
+            fetch('/api/v1/mascotas')
+                .then(response => response.json())
+                .then(data => {
+                    const total = data.datos.mascotas.length;
+                    document.getElementById('totalMascotas').textContent = total;
+                })
+                .catch(error => console.error('Error al obtener total de mascotas:', error));
+        }
+
+        function obtenerCantidadReportesPerdidas() {
+            // Hacer una solicitud al servidor para obtener la cantidad de reportes de pérdidas
+            // Aquí debes usar la ruta correcta para tu endpoint de reportes de pérdidas
+            fetch('/api/v1/reportePerdidas')
+                .then(response => response.json())
+                .then(data => {
+                    const cantidad = data.datos.reportes.length;
+                    document.getElementById('cantidadPerdidas').textContent = cantidad;
+                })
+                .catch(error => console.error('Error al obtener reportes de pérdidas:', error));
+        }
+
+function obtenerCantidadReportesMaltratos() {
+            // Hacer una solicitud al servidor para obtener la cantidad de reportes de maltratos
+            // Aquí debes usar la ruta correcta para tu endpoint de reportes de maltratos
+            fetch('/api/v1/reporteMaltratos')
+                .then(response => response.json())
+                .then(data => {
+                    const cantidad = data.datos.reportes.length;
+                    document.getElementById('cantidadMaltratos').textContent = cantidad;
+                })
+                .catch(error => console.error('Error al obtener reportes de maltratos:', error));
+        }
+
+    </script>
+
 </body>
+
 </html>

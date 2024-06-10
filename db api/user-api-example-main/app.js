@@ -2,6 +2,10 @@ const path = require('path');
 const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
+const db = require('./models/empleados');
+const bcrypt = require('bcrypt');
+const saltRounds = 10; 
+
 
 require('dotenv').config();
 
@@ -25,6 +29,46 @@ const registrarCastracion = require('./viewsJS/realizar_castracion');
 const misReportesUsuario = require('./viewsJS/mis_reportes_usuario');
 
 
+
+// Insertar empleados al iniciar la aplicación si no existen
+function insertarEmpleadosIniciales() {
+    db.getAllUsers((err, users) => {
+        if (err) throw err;
+        if (users.length === 0) {
+            const empleados = [
+                {
+                    nombre: 'María López',
+                    fechaNacimiento: '1990-05-15',
+                    ciudad: 'Ciudad de México',
+                    colonia: 'Centro',
+                    cp: '12345',
+                    sueldo: '$2500',
+                    telefono: '5551234567',
+                    correoElectronico: 'empleado1@gmail.com',
+                    contrasena: bcrypt.hashSync('123', saltRounds)
+                },
+                {
+                    nombre: 'Juan Pérez',
+                    fechaNacimiento: '1985-09-20',
+                    ciudad: 'Guadalajara',
+                    colonia: 'Zona Norte',
+                    cp: '54321',
+                    sueldo: '$3000',
+                    telefono: '5559876543',
+                    correoElectronico: 'empleado2@gmail.com',
+                    contrasena: bcrypt.hashSync('123', saltRounds)
+                }
+            ];
+
+            empleados.forEach((empleado) => {
+                db.createUser(empleado, (err, result) => {
+                    if (err) throw err;
+                    console.log('Empleado insertado:', empleado.nombre);
+                });
+            });
+        }
+    });
+}
 
 
 
@@ -99,6 +143,9 @@ app.get('/reportes_empleado', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'reportes_empleado.html'));
 });
 
+app.get('/registro_empleado', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'registro_empleado.html'));
+});
 
 // Middleware para proteger rutas
 function ensureAuthenticated(req, res, next) {
@@ -149,4 +196,6 @@ app.use(registrarCastracion);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    insertarEmpleadosIniciales();
+
 });

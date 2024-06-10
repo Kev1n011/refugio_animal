@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+:root {
+    --blanco: #E0E0E0;
+    --azul-opacidad: #184463;
+    --bg-menu: #003053;
+    --bg-body: #C7E1FF;
+}
+
+/* GENERALES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    color: var(--blanco);
+    background-color: #f0f0f0;
+}
+
+/* LAYOUT */
+.menu-dashboard {
+    z-index: 9999; /* Asegura que estos elementos estén sobre cualquier otro */
+    max-width: 350px;
+    height: 100vh;
+    background: var(--bg-menu);
+    padding: 20px;
+    transition: max-width 0.3s ease;
+    position:fixed;
+
+}
+
+.top-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-menu .logo {
+    display: flex;
+    align-items: center;
+}
+
+.top-menu .logo img {
+    width: 40px;
+    transition: width 0.3s ease;
+}
+
+.top-menu .logo span {
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+.top-menu .toggle {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.top-menu .toggle i {
+    font-size: 35px;
+}
+
+/* INPUT BOX */
+.input-search {
+    width: 100%;
+    margin: 50px 0;
+    background-color: var(--azul-opacidad);
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.input-search i {
+    font-size: 30px;
+    margin-right: 20px;
+}
+
+.input-search .input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    height: 30px;
+    color: var(--blanco);
+    font-size: 22px;
+    display: none;
+}
+
+
+.menu {
+    margin-top: 70px; /* Añade margen superior para bajar los elementos del menú */
+    display: flex;
+    flex-direction: column;
+}
+/* ENLACES MENU */
+.menu .enlace {
+    width: 100%;
+    padding: 20px 0 20px 17px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Evita que el texto se envuelva */
+    overflow: hidden; /* Oculta cualquier contenido que desborde el contenedor */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el contenido desborda */
+}
+
+.menu .enlace:hover {
+    background: var(--azul-opacidad);
+}
+
+.menu .enlace i {
+    margin-right: 20px;
+    font-size: 20px;
+
+}
+
+.menu .enlace span {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.menu-dashboard.closed {
+    z-index: 9999; /* Asegura que estos elementos estén sobre cualquier otro */
+    max-width: 120px; /* Ancho más delgado */
+    position:fixed;
+}
+
+.menu-dashboard.closed .input-search,
+.menu-dashboard.closed .menu .enlace,
+.menu-dashboard.closed .top-menu .logo span {
+    display: none; /* Oculta el input de búsqueda y el menú */
+    
+}
+
+.carousel-container {
+    width: 940px; /* Ancho fijo */
+    height: 230px; /* Alto fijo */
+    margin: 20px auto; /* Centra horizontalmente */
+    overflow: hidden; /* Asegúrate de que solo se vea una imagen a la vez */
+    position: relative;
+    margin-left: 660px;
+}
+
+.carousel {
+    width: 300%; /* Ajusta según la cantidad de imágenes */
+    height: 100%;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    overflow: hidden; /* Esto asegura que no se muestre más de un slide a la vez */
+}
+
+.carousel-slide {
+    width: 33.33%; /* Ancho fijo del 33.33% para cada imagen */
+    height: 100%;
+    background-size: cover; /* Ajusta la imagen para cubrir completamente el contenedor */
+    background-position: center;
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    flex-shrink: 0; /* Asegura que las imágenes no se reduzcan */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* Agregar sombra */
+}
+
+/* Ajustar items */
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+/* Texto de inicio */
+.content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    margin-left: 20px;
+}
+
+.container {
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 1400px;
+    left: 200px;
+    margin-top: 400px; /* Separación vertical entre el carousel y el contenedor de adopción */
+    margin-left: -1350px;
+    position: relative;
+}
+
+.realizar-adopcion-container {
+    display: flex;
+
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 1400px;
+    left: 90px;
+    margin-top: 400px; /* Separación vertical entre el carousel y el contenedor de adopción */
+    margin-left: -450px;
+    align-items: center; /* Alinea verticalmente los contenedores */
+
+    position: relative;
+
+
+    
+}
+
+
+
+
+.adoption-section {
+    margin-bottom: 40px; /* Agrega un margen inferior de 30px */
+   
+}
+
+.adoption-background {
+    position: absolute; /* Posición absoluta para cubrir todo el contenido */
+    top: 400px;
+    left: 0;
+    width: 2200px; /* Ocupa todo el ancho disponible */
+    height: 750px; /* Ocupa todo el alto disponible */
+    background-color:rgb(194, 194, 194); /* Color de fondo del rectángulo */
+    opacity: 0.7; /* Opacidad para que el texto sea visible */
+    border-radius: 10px; /* Ajusta el radio de los bordes si lo deseas */
+    z-index: -1; /* Envía el rectángulo detrás del texto */
+}
+
+.realizar-adopcion-background {
+    position: absolute; /* Posición absoluta para cubrir todo el contenido */
+    top: 1300px;
+    left: 0;
+    width: 2200px; /* Ocupa todo el ancho disponible */
+    height: 850px; /* Ocupa todo el alto disponible */
+    background-color:rgb(143, 143, 143); /* Color de fondo del rectángulo */
+    opacity: 0.7; /* Opacidad para que el texto sea visible */
+    border-radius: 10px; /* Ajusta el radio de los bordes si lo deseas */
+    z-index: -1; /* Envía el rectángulo detrás del texto */
+}
+.adoption-section h2 {
+    color: #333;
+}
+
+.adoption-section p {
+    color: #666;
+}
+
+.adoption-section .highlight {
+    font-weight: bold;
+    color: #ff7f50;
+}
+
+.adoption-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   
+}
+
+.adoption-columns {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las columnas se envuelvan en pantallas más pequeñas */
+    gap: 80px; /* Añade espacio entre las columnas */
+    justify-content: center; /* Centra las columnas */
+    width: 100%; /* Asegura que las columnas ocupen todo el ancho disponible */
+}
+
+.adoption-column {
+    flex: 1; /* Permite que las columnas ocupen el mismo espacio */
+    min-width: 300px; /* Asegura un ancho mínimo para cada columna */
+    max-width: 48%; /* Limita el ancho máximo de las columnas */
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho total */
+}
+
+.imagen-adopcion {
+    position: absolute;
+    top: 1350px;
+    margin-left: 200px;
+    z-index: -1; /* Para asegurarse de que la imagen esté detrás del contenido */
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px; /* Espaciado superior */
+}
+
+.realizar-adopcion-container button {
+    background-color: var(--azul-opacidad); /* Color de fondo del botón */
+    color: var(--blanco); /* Color del texto */
+    padding: 15px 30px; /* Espaciado interno */
+    border: none; /* Elimina el borde */
+    border-radius: 5px; /* Añade bordes redondeados */
+    font-size: 18px; /* Tamaño del texto */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: background-color 0.3s ease; /* Agrega transición suave al color de fondo */
+    margin-top: 50px; /* Espaciado superior */
+    align-self: center; /* Centra el botón verticalmente */
+}
+
+.realizar-adopcion-container button:hover {
+    background-color: #12374d; /* Cambia el color de fondo al pasar por encima */
+}
+.realizar-adopcion-container .adoption-section p {
+    margin-top: 20px;
+    margin-left: 30px;
+    max-width: 800px; /* Define el ancho máximo del contenedor de texto */
+    margin-left: auto; /* Centra el texto horizontalmente */
+    margin-right: auto; /* Centra el texto horizontalmente */
+}
+ 

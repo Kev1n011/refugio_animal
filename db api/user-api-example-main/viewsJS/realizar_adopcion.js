@@ -31,11 +31,11 @@ router.post('/registrar_adopcion', (req, res) => {
                 res.status(500).send('Error interno del servidor');
                 return;
             }
-            res.redirect('/inicio_usuario')
+            // Enviar una respuesta de éxito al cliente
+            res.status(200).send({ message: 'Adopción registrada exitosamente' });
         })
     });
 
 })
-
 
 module.exports = router;

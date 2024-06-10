@@ -120,4 +120,92 @@ router.post('/reportes', (req, res) => {
 
 
 
+router.post('/editarReporte', (req, res) => {
+    const { id, nombreMascota, estado, fecha, correo, descripcion } = req.body;
+
+    // Asumiendo que tienes una función para actualizar los reportes en tu modelo de base de datos
+    const reporteActualizado = {
+        nombre_mascota: nombreMascota,
+        estado,
+        fecha: new Date(fecha), // Asegúrate de convertir la fecha correctamente
+        correo,
+        descripcion
+    };
+
+    // Asumiendo que `updateReport` es una función en tu modelo de base de datos que actualiza un reporte basado en su ID
+    dbMaltratos.updateUser(id, reporteActualizado, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar el reporte:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.redirect('/reportes_empleado'); // Redirige al usuario a la página de reportes después de actualizar
+    });
+});
+
+router.post('/editarReportePerdida', (req, res) => {
+    const { id, nombreMascota, estado, fecha, correo, descripcion, colonia, calle, ciudad, cp } = req.body;
+
+    // Asumiendo que tienes una función para actualizar los reportes en tu modelo de base de datos
+    const reporteActualizado = {
+        nombre_mascota: nombreMascota,
+        estado,
+        fecha: new Date(fecha), // Asegúrate de convertir la fecha correctamente
+        correo,
+        descripcion,
+        colonia,
+        calle,
+        ciudad,
+        cp
+    };
+
+    // Asumiendo que `updateReport` es una función en tu modelo de base de datos que actualiza un reporte basado en su ID
+    dbPerdidas.updateUser(id, reporteActualizado, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar el reporte:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.redirect('/reportes_empleado'); // Redirige al usuario a la página de reportes después de actualizar
+    });
+});
+
+router.delete('/eliminarReportePerdida/:id', (req, res) => {
+    const { id } = req.params;
+    dbPerdidas.deleteUser(id, (err) => {
+        if (err) {
+            console.error('Error al eliminar el reporte:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.status(200).send('Reporte eliminado con éxito');
+    });
+});
+
+router.delete('/eliminarReporte/:id', (req, res) => {
+    const { id } = req.params;
+    dbMaltratos.deleteUser(id, (err) => {
+        if (err) {
+            console.error('Error al eliminar el reporte:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.status(200).send('Reporte eliminado con éxito');
+    });
+});
+
+router.get('/inicio_empleado', async (req, res) => {
+    try {
+        const totalPerdidas = await dbPerdidas.countAll(); // Asumiendo que esta función existe y devuelve una promesa
+        const totalMaltratos = await dbMaltratos.countAll(); // Asumiendo que esta función existe y devuelve una promesa
+        const totalMascotas = await mascota1.countAll(); // Asumiendo que esta función existe y devuelve una promesa
+
+        res.render('inicio_empleado', { totalPerdidas, totalMaltratos, totalMascotas });
+    } catch (err) {
+        console.error('Error al obtener los datos del dashboard:', err);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+
 module.exports = router;

@@ -1,45 +1,81 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const clientesModel = require('../models/clientes');
+const empleadosModel = require('../models/empleados');
+const bcrypt = require('bcrypt');
+const saltRounds = 10; 
 
 const router = express.Router();
 
-// Configurar body-parser para analizar solicitudes con cuerpo en formato de formulario
 router.use(bodyParser.urlencoded({ extended: true }));
 
-/*router.get('/registro', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views', 'registro.html'));
-});*/
-
-
-// Ruta para manejar el inicio de sesión
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     const {nombre, apellido_paterno, apellido_materno, telefono, email, password, colonia, calle, ciudad, cp, fecha_nacimiento } = req.body;
 
-    const nuevoUsuario = {
-        nombre: nombre,
-        apellido_paterno: apellido_paterno,
-        apellido_materno: apellido_materno,
-        telefono: telefono,
-        correoElectronico: email,
-        contrasena: password,
-        colonia: colonia,
-        calle: calle,
-        ciudad: ciudad,
-        cp: cp,
-        fechaRegistro: fecha_nacimiento
-    };
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds); // Cifrar la contraseña
 
-    // Consultar la base de datos para verificar las credenciales
-    clientesModel.createUser(nuevoUsuario, (err, result) => {
-        if (err) {
-            console.error('Error al crear el usuario:', err);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-        // Redirigir al usuario a la página de inicio de sesión después del registro exitoso
-        res.redirect('/');
-    });
+        // Verificar que todos los campos estén presentes
+        
+
+        const nuevoUsuario = {
+            nombre: nombre,
+            apellido_paterno: apellido_paterno,
+            apellido_materno: apellido_materno,
+            telefono: telefono,
+            correoElectronico: email,
+            contrasena: hashedPassword, 
+            colonia: colonia,
+            calle: calle,
+            ciudad: ciudad,
+            cp: cp,
+            fechaRegistro: fecha_nacimiento
+        };
+
+        clientesModel.createUser(nuevoUsuario, (err, result) => {
+            if (err) {
+                console.error('Error al crear el usuario:', err);
+                res.status(500).send('Error interno del servidor');
+                return;
+            }
+            res.redirect('/');
+        });
+    } catch (error) {
+        console.error('Error al cifrar la contraseña:', error);
+        res.status(500).send('Error al procesar la solicitud');
+    }
+});
+
+router.post('/registro_empleado', async (req, res) => {
+    const {nombre, telefono, email, password, colonia, ciudad, cp, fecha_nacimiento, sueldo } = req.body;
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds); // Cifrar la contraseña
+
+        const nuevoUsuario = {
+            nombre: nombre,
+            telefono: telefono,
+            correoElectronico: email,
+            contrasena: hashedPassword, 
+            colonia: colonia,
+            ciudad: ciudad,
+            cp: cp,
+            fechaNacimiento: fecha_nacimiento,
+            sueldo: sueldo
+        };
+
+        empleadosModel.createUser(nuevoUsuario, (err, result) => {
+            if (err) {
+                console.error('Error al crear el usuario:', err);
+                res.status(500).send('Error interno del servidor');
+                return;
+            }
+            res.redirect('/inicio_empleado');
+        });
+    } catch (error) {
+        console.error('Error al cifrar la contraseña:', error);
+        res.status(500).send('Error al procesar la solicitud');
+    }
 });
 
 module.exports = router;
