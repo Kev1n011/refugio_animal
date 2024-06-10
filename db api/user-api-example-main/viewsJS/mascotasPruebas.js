@@ -4,7 +4,7 @@ const router = express.Router();
 
 router = express.Router()
 
-router.post('/registrar_mascota1', (req, res) => {
+router.post('/registrar_mascotasdsd', (req, res) => {
     const {nombre, tipo, raza, edad, sexo, color, peso} = req.body
 
     const nuevaMascota = {

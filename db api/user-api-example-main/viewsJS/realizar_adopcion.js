@@ -23,7 +23,8 @@ router.post('/registrar_adopcion', (req, res) => {
             referencias: referencias,
             motivoAdopcion: motivo,
             fechaAdopcion: fecha_adopcion,
-            nombreMascota: nombreMascota
+            nombreMascota: nombreMascota,
+            id_mascota: lista_mascotas
         }
         adopcion.createUser(nuevaAdopcion, (err, result) => {
             if (err) {

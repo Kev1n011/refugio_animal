@@ -13,7 +13,7 @@
     <style>
         .card-img-top {
             height: 340px;
-            width: 400px;
+            width: 415px;
             /* Ajusta la altura según necesites */
             object-fit:fill;
             /* Esto asegura que la imagen cubra el espacio asignado sin perder sus proporciones */
@@ -98,80 +98,140 @@
     <script>
         // Función para cargar las mascotas como cartas
         function cargarMascotas() {
-            var xhrMascotas = new XMLHttpRequest();
-            var xhrAdopcion = new XMLHttpRequest();
+        var xhrMascotas = new XMLHttpRequest();
+        var xhrAdopcion = new XMLHttpRequest();
+        var xhrPerdidas = new XMLHttpRequest();
+        var xhrMaltratos = new XMLHttpRequest();
+        var xhrCastracion = new XMLHttpRequest(); // Agregar XMLHttpRequest para castración
 
-            var promesaMascotas = new Promise(function(resolve, reject) {
-                xhrMascotas.open('GET', '/api/v1/mascotas', true);
-                xhrMascotas.onload = function() {
-                    if (xhrMascotas.status === 200) {
-                        resolve(JSON.parse(xhrMascotas.responseText).datos.mascotas);
-                    } else {
-                        reject(new Error('Error al cargar las mascotas: ' + xhrMascotas.statusText));
-                    }
-                };
-                xhrMascotas.onerror = function() {
-                    reject(new Error('Error de red al cargar mascotas'));
-                };
-                xhrMascotas.send();
-            });
+        var promesaMascotas = new Promise(function(resolve, reject) {
+            xhrMascotas.open('GET', '/api/v1/mascotas', true);
+            xhrMascotas.onload = function() {
+                if (xhrMascotas.status === 200) {
+                    resolve(JSON.parse(xhrMascotas.responseText).datos.mascotas);
+                } else {
+                    reject(new Error('Error al cargar las mascotas: ' + xhrMascotas.statusText));
+                }
+            };
+            xhrMascotas.onerror = function() {
+                reject(new Error('Error de red al cargar mascotas'));
+            };
+            xhrMascotas.send();
+        });
 
-            var promesaAdopcion = new Promise(function(resolve, reject) {
-                xhrAdopcion.open('GET', '/api/v1/adopcion', true);
-                xhrAdopcion.onload = function() {
-                    if (xhrAdopcion.status === 200) {
-                        resolve(JSON.parse(xhrAdopcion.responseText).datos.empleados);
-                    } else {
-                        reject(new Error('Error al cargar datos de adopción: ' + xhrAdopcion.statusText));
-                    }
-                };
-                xhrAdopcion.onerror = function() {
-                    reject(new Error('Error de red al cargar datos de adopción'));
-                };
-                xhrAdopcion.send();
-            });
+        var promesaAdopcion = new Promise(function(resolve, reject) {
+            xhrAdopcion.open('GET', '/api/v1/adopcion', true);
+            xhrAdopcion.onload = function() {
+                if (xhrAdopcion.status === 200) {
+                    resolve(JSON.parse(xhrAdopcion.responseText).datos.empleados);
+                } else {
+                    reject(new Error('Error al cargar datos de adopción: ' + xhrAdopcion.statusText));
+                }
+            };
+            xhrAdopcion.onerror = function() {
+                reject(new Error('Error de red al cargar datos de adopción'));
+            };
+            xhrAdopcion.send();
+        });
 
-            Promise.all([promesaMascotas, promesaAdopcion]).then(function(resultados) {
-                var mascotas = resultados[0];
-                var mascotasCastracion = resultados[1];
-                var mascotasContainer = document.getElementById('mascotasContainer');
-                mascotasContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevas cartas
+        var promesaPerdidas = new Promise(function(resolve, reject) {
+            xhrPerdidas.open('GET', '/api/v1/reportePerdidas', true);
+            xhrPerdidas.onload = function() {
+                if (xhrPerdidas.status === 200) {
+                    resolve(JSON.parse(xhrPerdidas.responseText).datos.reportes);
+                } else {
+                    reject(new Error('Error al cargar reportes de perdidas: ' + xhrPerdidas.statusText));
+                }
+            };
+            xhrPerdidas.onerror = function() {
+                reject(new Error('Error de red al cargar reportes de perdidas'));
+            };
+            xhrPerdidas.send();
+        });
 
-                mascotas.forEach(function(mascota) {
-                    var enCastracion = mascotasCastracion.some(function(mascotaCastrada) {
-                        return mascotaCastrada.nombreMascota === mascota.nombre;
-                    });
+        var promesaMaltratos = new Promise(function(resolve, reject) {
+            xhrMaltratos.open('GET', '/api/v1/reporteMaltratos', true);
+            xhrMaltratos.onload = function() {
+                if (xhrMaltratos.status === 200) {
+                    resolve(JSON.parse(xhrMaltratos.responseText).datos.reportes);
+                } else {
+                    reject(new Error('Error al cargar reportes de maltratos: ' + xhrMaltratos.statusText));
+                }
+            };
+            xhrMaltratos.onerror = function() {
+                reject(new Error('Error de red al cargar reportes de maltratos'));
+            };
+            xhrMaltratos.send();
+        });
 
-                    if (!enCastracion) {
-                        var card = document.createElement('div');
-                        card.classList.add('col-md-4', 'mb-4');
-                        card.innerHTML = `
-                            <div class="card">
-                                <img src="${mascota.imagen_mascota}" class="card-img-top" alt="${mascota.nombre}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${mascota.nombre}</h5>
-                                    <p class="card-text">${mascota.tipo}</p>
-                                    <button type="button" class="btn btn-primary btn-adoptar" data-mascota-id="${mascota.id}" data-bs-toggle="modal" data-bs-target="#adopcionModal">
-                                        Adoptar
-                                    </button>
-                                </div>
+        var promesaCastracion = new Promise(function(resolve, reject) {
+            xhrCastracion.open('GET', '/api/v1/servicioCastracion', true);
+            xhrCastracion.onload = function() {
+                if (xhrCastracion.status === 200) {
+                    resolve(JSON.parse(xhrCastracion.responseText).datos.servicios);
+                } else {
+                    reject(new Error('Error al cargar datos de castración: ' + xhrCastracion.statusText));
+                }
+            };
+            xhrCastracion.onerror = function() {
+                reject(new Error('Error de red al cargar datos de castración'));
+            };
+            xhrCastracion.send();
+        });
+
+        Promise.all([promesaMascotas, promesaAdopcion, promesaPerdidas, promesaMaltratos, promesaCastracion]).then(function(resultados) {
+            var mascotas = resultados[0];
+            var empleadosAdopcion = resultados[1];
+            var reportesPerdidas = resultados[2];
+            var reportesMaltratos = resultados[3];
+            var castraciones = resultados[4]; // Recibir resultados de castración
+            var mascotasContainer = document.getElementById('mascotasContainer');
+            mascotasContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevas cartas
+
+            mascotas.forEach(function(mascota) {
+                var enAdopcion = empleadosAdopcion.some(function(adopcion) {
+                    return adopcion.id_mascota === mascota.id;
+                });
+
+                var enPerdida = reportesPerdidas.some(function(perdida) {
+                    return perdida.id_mascota === mascota.id;
+                });
+
+                var enMaltrato = reportesMaltratos.some(function(maltrato) {
+                    return maltrato.id_mascota === mascota.id;
+                });
+
+                
+
+                if (!enAdopcion && !enPerdida && !enMaltrato) {
+                    var card = document.createElement('div');
+                    card.classList.add('col-md-4', 'mb-4');
+                    card.innerHTML = `
+                        <div class="card">
+                            <img src="${mascota.imagen_mascota}" class="card-img-top" alt="${mascota.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${mascota.nombre}</h5>
+                                <p class="card-text">${mascota.tipo}</p>
+                                <button type="button" class="btn btn-primary btn-adoptar" data-mascota-id="${mascota.id}" data-bs-toggle="modal" data-bs-target="#adopcionModal">
+                                    Adoptar
+                                </button>
                             </div>
-                        `;
-                        mascotasContainer.appendChild(card);
-                    }
-                });
-
-                // Agrega el evento onclick para el botón de adoptar
-                document.querySelectorAll('.btn-adoptar').forEach(function(boton) {
-                    boton.addEventListener('click', function() {
-                        document.getElementById('lista_mascotas').value = this.getAttribute('data-mascota-id');
-                    });
-                });
-            }).catch(function(error) {
-                console.error(error);
+                        </div>
+                    `;
+                    mascotasContainer.appendChild(card);
+                }
             });
-        }
 
+            // Agrega el evento onclick para el botón de adoptar
+            document.querySelectorAll('.btn-adoptar').forEach(function(boton) {
+                boton.addEventListener('click', function() {
+                    document.getElementById('lista_mascotas').value = this.getAttribute('data-mascota-id');
+                });
+            });
+        }).catch(function(error) {
+            console.error(error);
+        });
+    }
         window.onload = function () {
             cargarMascotas();
         };
@@ -195,6 +255,17 @@
                     }
                 });
     
+                // Validar la longitud del número de teléfono
+                var telefono = $('#telefono').val();
+                if (telefono.length !== 10) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el teléfono',
+                        text: 'El número de teléfono debe tener exactamente 10 dígitos.',
+                    });
+                    return;
+                }
+    
                 if (!isValid) {
                     Swal.fire({
                         icon: 'error',
@@ -204,7 +275,7 @@
                     return;
                 }
     
-                // Si todos los campos están llenos, enviar el formulario
+                // Si todos los campos están llenos y las validaciones son correctas, enviar el formulario
                 $.ajax({
                     type: 'POST',
                     url: form.action,

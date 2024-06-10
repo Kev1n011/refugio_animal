@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Teléfono</label>
-                                <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                                <input type="number" class="form-control" id="telefono" name="telefono" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Correo electrónico</label>
@@ -116,53 +116,112 @@
         });
     </script>
 
-    <script>
-        // Función para enviar el formulario
-        function submitForm() {
-            // Obtener el formulario por su ID
-            var form = document.getElementById('registroForm');
+<script>
+    // Función para enviar el formulario
+    function submitForm() {
+        // Obtener el formulario por su ID
+        var form = document.getElementById('registroForm');
 
-            // Validar que todos los campos estén llenos
-            var isValid = true;
-            form.querySelectorAll('input').forEach(function(input) {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    return;
-                }
-            });
-
-            if (!isValid) {
-                // Mostrar un mensaje de error o Sweet Alert indicando que todos los campos son obligatorios
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Por favor, complete todos los campos.',
-                });
+        // Validar que todos los campos estén llenos
+        var isValid = true;
+        form.querySelectorAll('input').forEach(function(input) {
+            if (!input.value.trim()) {
+                isValid = false;
                 return;
             }
+        });
 
-            // Si todos los campos están llenos, enviar el formulario
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: $(form).serialize(),
-                success: function(response) {
-                    // Mostrar el Sweet Alert de confirmación
+        // Validar la estructura del correo electrónico
+        var email = document.getElementById('email').value;
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en el correo electrónico',
+                text: 'Por favor, ingrese un correo electrónico válido.',
+            });
+            return;
+        }
+
+        // Validar la longitud de la contraseña solo si el campo no está vacío
+        var password = document.getElementById('password').value;
+        if (password && password.length < 8) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la contraseña',
+                text: 'La contraseña debe tener al menos 8 caracteres.',
+            });
+            return;
+        }
+
+        // Validar la longitud del número de teléfono
+        var telefono = document.getElementById('telefono').value;
+        if (telefono.length !== 10) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en el teléfono',
+                text: 'El número de teléfono debe tener exactamente 10 dígitos.',
+            });
+            return;
+        }
+
+        if (!isValid) {
+            // Mostrar un mensaje de error o Sweet Alert indicando que todos los campos son obligatorios
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Por favor, complete todos los campos.',
+            });
+            return;
+        }
+
+        // Si todos los campos están llenos y las validaciones son correctas, enviar el formulario
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: $(form).serialize(),
+            success: function(response) {
+                // Mostrar el Sweet Alert de confirmación
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Registro exitoso!',
+                    showConfirmButton: false,
+                    timer: 3000, // 3 segundos
+                    timerProgressBar: true
+                }).then((result) => {
+                    // Redireccionar a la página de inicio del empleado
+                    window.location.href = '/inicio_empleado';
+                });
+            },
+            error: function(xhr) {
+                // Manejar errores de respuesta del servidor
+                if (xhr.status === 409) {
                     Swal.fire({
-                        icon: 'success',
-                        title: '¡Registro exitoso!',
-                        showConfirmButton: false,
-                        timer: 3000, // 3 segundos
-                        timerProgressBar: true
-
-                    }).then((result) => {
-                        // Redireccionar a la página de inicio del empleado
-                        window.location.href = '/inicio_empleado';
+                        icon: 'error',
+                        title: 'Error de registro',
+                        text: 'Ya existe un usuario registrado con ese correo electrónico.'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de registro',
+                        text: 'Ha ocurrido un error al procesar su solicitud.'
                     });
                 }
-            });
-        }
-    </script>
+            }
+        });
+    }
+
+    // Esperar a que el documento esté listo
+    $(document).ready(function(){
+        // Capturar el evento de envío del formulario
+        $('#registroForm').submit(function(event) {
+            // Prevenir el envío del formulario
+            event.preventDefault();
+            submitForm(); // Llamar a la función que maneja el envío
+        });
+    });
+</script>
 
     
 

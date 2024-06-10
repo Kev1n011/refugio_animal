@@ -50,3 +50,30 @@ router.post('/registrar_mascota', upload.single('imagen'), (req, res) => {
   });
 });
 module.exports = router;
+
+router.post('/registrar_mascota1', upload.single('imagen'), (req, res) => {
+  const { nombre, tipo, raza, edad, sexo, color, peso } = req.body;
+  const imagenRuta = req.file ? 'imagenes/' + req.file.filename : ''; // Cambio aquí para hacer la ruta relativa a public
+
+  const nuevaMascota = {
+      nombre: nombre,
+      tipo: tipo,
+      raza: raza,
+      edad: edad,
+      sexo: sexo,
+      color: color,
+      peso: peso,
+      imagen_mascota: imagenRuta
+  };
+
+  mascota.createUser(nuevaMascota, (err, result) => {
+      if (err) {
+          console.error('Error al registrar la mascota:', err);
+          res.status(500).send('Error interno del servidor');
+          return;
+      }
+      // Asegúrate de enviar una respuesta en caso de éxito
+      res.json({ id: result.insertId, imagen_mascota: imagenRuta });
+  });
+});
+module.exports = router;

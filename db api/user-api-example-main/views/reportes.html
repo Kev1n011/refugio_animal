@@ -85,9 +85,13 @@
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
               </div>
+             
               <div class="mb-3">
                 <label for="tipo" class="form-label">Tipo</label>
-                <input type="text" class="form-control" id="tipo" name="tipo" required>
+                <select class="form-select" id="tipo" name="tipo" required>
+                  <option value="Perro">Perro</option>
+                  <option value="Gato">Gato</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="raza" class="form-label">Raza</label>
@@ -114,7 +118,7 @@
               </div>
               <div class="mb-3">
                 <label for="imagen" class="form-label">Imagen de la Mascota</label>
-                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" onchange="mostrarImagen(event)">
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" onchange="mostrarImagen(event)" required>
               </div>
               <div class="mb-3">
                 <img id="vistaPrevia" src="#" alt="Vista previa de la imagen" style="display:none;">
@@ -167,7 +171,7 @@
         </div>
         <div class="mb-3">
           <label for="cp" class="form-label">Código Postal</label>
-          <input type="text" class="form-control" id="cp" name="cp">
+          <input type="number" class="form-control" id="cp" name="cp">
         </div>
       </div>
       <input type="hidden" id="correoUsuario" name="correo">
@@ -286,6 +290,7 @@
               title: 'Reporte enviado',
               icon: 'success',
               timer: 3000, // La alerta se cerrará automáticamente después de 3 segundos
+              timerProgressBar: true,
               showConfirmButton: false
             }).then(function() {
               window.location.href = '/inicio_usuario'; // Redirige a la página de inicio_usuario después de cerrar la alerta
@@ -313,4 +318,4 @@
 
 </body>
 
-</html>
+</html> 

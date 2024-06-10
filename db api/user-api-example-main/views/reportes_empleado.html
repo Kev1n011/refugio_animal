@@ -250,10 +250,15 @@
                             <label for="nombreMascota" class="form-label">Nombre de la Mascota</label>
                             <input type="text" class="form-control" name="nombreMascota" value="${reporteSeleccionado[0].textContent}">
                         </div>
+                         <div class="mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="EN ESPERA">EN ESPERA</option>
+                                    <option value="ATENDIDO">ATENDIDO</option>
+                                    <option value="FINALIZADO">FINALIZADO</option>
+                                </select>
+                            </div>
                         <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado" value="${reporteSeleccionado[1].textContent}">
-                        </div>
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha</label>
                             <input type="date" class="form-control" name="fecha" value="${reporteSeleccionado[2].textContent}">
@@ -284,7 +289,7 @@
 
                         <div class="mb-3">
                             <label for="cp" class="form-label">codigoPostal</label>
-                            <textarea class="form-control" name="cp">${reporteSeleccionado[10].textContent}</textarea>
+                            <input type="number" class="form-control" name="cp" value="${reporteSeleccionado[10].textContent}">
                         </div>
                         <button type="button" class="btn btn-primary" onclick="guardarCambiosPerdidas()">Guardar Cambios</button>
                     </form>
@@ -297,30 +302,58 @@
             modal.show();
         }
 
-        function guardarCambiosPerdidas(event) {
-            
+        function guardarCambiosPerdidas() {
+            const form = document.getElementById('editarFormPerdidas');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Validar que todos los campos estén llenos
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Todos los campos deben estar llenos.';
+                }
+            });
+
+            // Validar la estructura del correo electrónico
+            const email = form.querySelector('input[name="correo"]').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                isValid = false;
+                errorMessage = 'Por favor, ingrese un correo electrónico válido.';
+            }
+
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en el formulario',
+                    text: errorMessage
+                });
+                return;
+            }
+
+            // Confirmación antes de enviar el formulario
             Swal.fire({
-                title: '¿Guardar cambios?',
-                text: "Estás seguro de que deseas guardar los cambios",
+                title: '¿Estás seguro?',
+                text: "¿Deseas guardar los cambios realizados?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí, guardar cambios',
-                cancelButtonText: 'Cancelar'
+                cancelButtonText: 'No, cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Mostrar SweetAlert de éxito
-                    Swal.fire({
-                        title: '¡Cambios guardados!',
-                        icon: 'success',
-                        timer: 3000,
-                        timerProgressBar: true
-                    });
-                    // Recargar la página después de 3 segundos
-                    setTimeout(() => {
-                        document.getElementById("editarFormPerdidas").submit(); // Enviar el formulario manualmente
-                    }, 3000);
+                    form.submit(); // Enviar el formulario
+                    Swal.fire(
+                        'Guardado',
+                        'Los cambios han sido guardados.',
+                        'success'
+                    ).then((result) => {
+                    // Redireccionar a la página de inicio del empleado
+                    window.location.href = '/reportes_empleado';
+                });
                 }
             });
         }
@@ -343,10 +376,15 @@
                             <label for="nombreMascota" class="form-label">Nombre de la Mascota</label>
                             <input type="text" class="form-control" name="nombreMascota" value="${reporteSeleccionado[0].textContent}">
                         </div>
+                       
                         <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado" value="${reporteSeleccionado[1].textContent}">
-                        </div>
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="EN ESPERA">EN ESPERA</option>
+                                    <option value="ATENDIDO">ATENDIDO</option>
+                                    <option value="FINALIZADO">FINALIZADO</option>
+                                </select>
+                            </div>
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha</label>
                             <input type="date" class="form-control" name="fecha" value="${reporteSeleccionado[2].textContent}">
@@ -369,30 +407,58 @@
 
         }
 
-        function guardarCambios(event) {
-            
+        function guardarCambios() {
+            const form = document.getElementById('editarForm');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Validar que todos los campos estén llenos
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Todos los campos deben estar llenos.';
+                }
+            });
+
+            // Validar la estructura del correo electrónico
+            const email = form.querySelector('input[name="correo"]').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                isValid = false;
+                errorMessage = 'Por favor, ingrese un correo electrónico válido.';
+            }
+
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en el formulario',
+                    text: errorMessage
+                });
+                return;
+            }
+
+            // Confirmación antes de enviar el formulario
             Swal.fire({
-                title: '¿Guardar cambios?',
-                text: "Estás seguro de que deseas guardar los cambios",
+                title: '¿Estás seguro?',
+                text: "¿Deseas guardar los cambios realizados?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí, guardar cambios',
-                cancelButtonText: 'Cancelar'
+                cancelButtonText: 'No, cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Mostrar SweetAlert de éxito
-                    Swal.fire({
-                        title: '¡Cambios guardados!',
-                        icon: 'success',
-                        timer: 3000,
-                        timerProgressBar: true
-                    });
-                    // Recargar la página después de 3 segundos
-                    setTimeout(() => {
-                        document.getElementById("editarForm").submit(); // Enviar el formulario manualmente
-                    }, 3000);
+                    form.submit(); // Enviar el formulario
+                    Swal.fire(
+                        'Guardado',
+                        'Los cambios han sido guardados.',
+                        'success'
+                    ).then((result) => {
+                    // Redireccionar a la página de inicio del empleado
+                    window.location.href = '/reportes_empleado';
+                });
                 }
             });
         }

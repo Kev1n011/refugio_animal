@@ -51,3 +51,12 @@ exports.getUserByEmail = (email, callback) => {
 };
 
 
+exports.findByEmail = (email, callback) => {
+    db.query('SELECT correoElectronico FROM empleados WHERE correoElectronico = ?', email, (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        return callback(null, rows.length > 0);
+    });
+};
+

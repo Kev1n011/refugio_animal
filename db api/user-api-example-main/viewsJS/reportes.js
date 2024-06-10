@@ -139,7 +139,6 @@ router.post('/editarReporte', (req, res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.redirect('/reportes_empleado'); // Redirige al usuario a la página de reportes después de actualizar
     });
 });
 
@@ -166,7 +165,6 @@ router.post('/editarReportePerdida', (req, res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.redirect('/reportes_empleado'); // Redirige al usuario a la página de reportes después de actualizar
     });
 });
 
