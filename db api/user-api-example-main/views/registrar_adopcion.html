@@ -98,45 +98,78 @@
     <script>
         // Función para cargar las mascotas como cartas
         function cargarMascotas() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/v1/mascotas', true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var mascotas = JSON.parse(xhr.responseText).datos.mascotas;
-                        var mascotasContainer = document.getElementById('mascotasContainer');
-                        mascotas.forEach(function (mascota) {
-                            // Crea la carta de la mascota
-                            var card = document.createElement('div');
-                            card.classList.add('col-md-4', 'mb-4');
-                            card.innerHTML = `
-                                <div class="card">
-                                    <img src="${mascota.imagen_mascota}" class="card-img-top" alt="${mascota.nombre}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${mascota.nombre}</h5>
-                                        <p class="card-text">${mascota.tipo}</p>
-                                        <button type="button" class="btn btn-primary btn-adoptar" data-mascota-id="${mascota.id}" data-bs-toggle="modal" data-bs-target="#adopcionModal">
-                                            Adoptar
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                            mascotasContainer.appendChild(card);
-                        });
-                        // Agrega el evento onclick para el botón de adoptar
-                        var botonesAdoptar = document.querySelectorAll('.btn-adoptar');
-                        botonesAdoptar.forEach(function (boton) {
-                            boton.addEventListener('click', function () {
-                                var mascotaId = this.getAttribute('data-mascota-id');
-                                document.getElementById('lista_mascotas').value = mascotaId;
-                            });
-                        });
+            var xhrMascotas = new XMLHttpRequest();
+            var xhrAdopcion = new XMLHttpRequest();
+
+            var promesaMascotas = new Promise(function(resolve, reject) {
+                xhrMascotas.open('GET', '/api/v1/mascotas', true);
+                xhrMascotas.onload = function() {
+                    if (xhrMascotas.status === 200) {
+                        resolve(JSON.parse(xhrMascotas.responseText).datos.mascotas);
                     } else {
-                        console.error('Error al cargar las mascotas:', xhr.statusText);
+                        reject(new Error('Error al cargar las mascotas: ' + xhrMascotas.statusText));
                     }
-                }
-            };
-            xhr.send();
+                };
+                xhrMascotas.onerror = function() {
+                    reject(new Error('Error de red al cargar mascotas'));
+                };
+                xhrMascotas.send();
+            });
+
+            var promesaAdopcion = new Promise(function(resolve, reject) {
+                xhrAdopcion.open('GET', '/api/v1/adopcion', true);
+                xhrAdopcion.onload = function() {
+                    if (xhrAdopcion.status === 200) {
+                        resolve(JSON.parse(xhrAdopcion.responseText).datos.empleados);
+                    } else {
+                        reject(new Error('Error al cargar datos de adopción: ' + xhrAdopcion.statusText));
+                    }
+                };
+                xhrAdopcion.onerror = function() {
+                    reject(new Error('Error de red al cargar datos de adopción'));
+                };
+                xhrAdopcion.send();
+            });
+
+            Promise.all([promesaMascotas, promesaAdopcion]).then(function(resultados) {
+                var mascotas = resultados[0];
+                var mascotasCastracion = resultados[1];
+                var mascotasContainer = document.getElementById('mascotasContainer');
+                mascotasContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevas cartas
+
+                mascotas.forEach(function(mascota) {
+                    var enCastracion = mascotasCastracion.some(function(mascotaCastrada) {
+                        return mascotaCastrada.nombreMascota === mascota.nombre;
+                    });
+
+                    if (!enCastracion) {
+                        var card = document.createElement('div');
+                        card.classList.add('col-md-4', 'mb-4');
+                        card.innerHTML = `
+                            <div class="card">
+                                <img src="${mascota.imagen_mascota}" class="card-img-top" alt="${mascota.nombre}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${mascota.nombre}</h5>
+                                    <p class="card-text">${mascota.tipo}</p>
+                                    <button type="button" class="btn btn-primary btn-adoptar" data-mascota-id="${mascota.id}" data-bs-toggle="modal" data-bs-target="#adopcionModal">
+                                        Adoptar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        mascotasContainer.appendChild(card);
+                    }
+                });
+
+                // Agrega el evento onclick para el botón de adoptar
+                document.querySelectorAll('.btn-adoptar').forEach(function(boton) {
+                    boton.addEventListener('click', function() {
+                        document.getElementById('lista_mascotas').value = this.getAttribute('data-mascota-id');
+                    });
+                });
+            }).catch(function(error) {
+                console.error(error);
+            });
         }
 
         window.onload = function () {

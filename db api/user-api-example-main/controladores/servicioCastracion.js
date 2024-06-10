@@ -1,4 +1,4 @@
-const servicioCastracion = require('../models/clientes.js');
+const servicioCastracion = require('../models/servicioCastracion.js');
 
 // Obtener todos los empleados
 const obtenerServicio = (req, res) => {

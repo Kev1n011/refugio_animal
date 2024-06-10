@@ -77,7 +77,7 @@
                             timer: 3000, // 3 segundos
                             timerProgressBar: true
                         }).then((result) => {
-                            window.location.href = '/inicio_empleado';
+                            window.location.href = '/inicio_usuario';
                         });
                     }
                 });
@@ -85,48 +85,59 @@
         });
 
         function cargarMascotas() {
-            var xhr = new XMLHttpRequest();
-            var xhr_castracion = new XMLHttpRequest();
-            var mascotas_castracion;
-
-            xhr_castracion.open('GET', '/api/v1/servicioCastracion', true);
-            xhr_castracion.onreadystatechange = function() {
-                if (xhr_castracion.readyState === XMLHttpRequest.DONE) {
-                    if (xhr_castracion.status === 200) {
-                        mascotas_castracion = JSON.parse(xhr_castracion.responseText).datos.servicios;
-                    }
-                }
-            };
-            xhr_castracion.send();
-
-            xhr.open('GET', '/api/v1/mascotas', true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var mascotas = JSON.parse(xhr.responseText).datos.mascotas;
-                        var selectMascotas = document.getElementById('lista_mascotas');
-                        selectMascotas.innerHTML = '';
-
-                        mascotas.forEach(function(mascota) {
-                            var contador = 0;
-                            mascotas_castracion.forEach(function(mascota_castrada) {
-                                if (mascota_castrada.id_mascota === mascota.id) {
-                                    contador++;
-                                }
-                            });
-                            if (contador === 0) {
-                                var option = document.createElement('option');
-                                option.value = mascota.id;
-                                option.textContent = mascota.nombre + ' (' + mascota.tipo + ')';
-                                selectMascotas.appendChild(option);
-                            }
-                        });
+            var promesaMascotas = new Promise(function(resolve, reject) {
+                var xhrMascotas = new XMLHttpRequest();
+                xhrMascotas.open('GET', '/api/v1/mascotas', true);
+                xhrMascotas.onload = function() {
+                    if (xhrMascotas.status === 200) {
+                        resolve(JSON.parse(xhrMascotas.responseText).datos.mascotas);
                     } else {
-                        console.error('Error al cargar las mascotas:', xhr.statusText);
+                        reject(new Error('Error al cargar las mascotas: ' + xhrMascotas.statusText));
                     }
-                }
-            };
-            xhr.send();
+                };
+                xhrMascotas.onerror = function() {
+                    reject(new Error('Error de red al cargar mascotas'));
+                };
+                xhrMascotas.send();
+            });
+
+            var promesaCastracion = new Promise(function(resolve, reject) {
+                var xhrCastracion = new XMLHttpRequest();
+                xhrCastracion.open('GET', '/api/v1/servicioCastracion', true);
+                xhrCastracion.onload = function() {
+                    if (xhrCastracion.status === 200) {
+                        resolve(JSON.parse(xhrCastracion.responseText).datos.servicios);
+                    } else {
+                        reject(new Error('Error al cargar datos de castración: ' + xhrCastracion.statusText));
+                    }
+                };
+                xhrCastracion.onerror = function() {
+                    reject(new Error('Error de red al cargar datos de castración'));
+                };
+                xhrCastracion.send();
+            });
+
+            Promise.all([promesaMascotas, promesaCastracion]).then(function(resultados) {
+                var mascotas = resultados[0];
+                var serviciosCastracion = resultados[1];
+                var selectMascotas = document.getElementById('lista_mascotas');
+                selectMascotas.innerHTML = ''; // Limpiar el select antes de agregar nuevas opciones
+
+                mascotas.forEach(function(mascota) {
+                    var yaCastrada = serviciosCastracion.some(function(servicio) {
+                        return servicio.id_mascota === mascota.id;
+                    });
+
+                    if (!yaCastrada) {
+                        var option = document.createElement('option');
+                        option.value = mascota.id;
+                        option.textContent = mascota.nombre + ' (' + mascota.tipo + ')';
+                        selectMascotas.appendChild(option);
+                    }
+                });
+            }).catch(function(error) {
+                console.error(error);
+            });
         }
 
         window.onload = function() {

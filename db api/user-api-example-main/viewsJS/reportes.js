@@ -194,18 +194,5 @@ router.delete('/eliminarReporte/:id', (req, res) => {
     });
 });
 
-router.get('/inicio_empleado', async (req, res) => {
-    try {
-        const totalPerdidas = await dbPerdidas.countAll(); // Asumiendo que esta función existe y devuelve una promesa
-        const totalMaltratos = await dbMaltratos.countAll(); // Asumiendo que esta función existe y devuelve una promesa
-        const totalMascotas = await mascota1.countAll(); // Asumiendo que esta función existe y devuelve una promesa
-
-        res.render('inicio_empleado', { totalPerdidas, totalMaltratos, totalMascotas });
-    } catch (err) {
-        console.error('Error al obtener los datos del dashboard:', err);
-        res.status(500).send('Error interno del servidor');
-    }
-});
-
 
 module.exports = router;

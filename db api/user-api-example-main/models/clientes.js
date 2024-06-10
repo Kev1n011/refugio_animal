@@ -48,3 +48,12 @@ exports.getUserByEmail = (email, callback) => {
         return callback(null, rows[0]);
     });
 };
+
+exports.findByEmail = (email, callback) => {
+    db.query('SELECT correoElectronico FROM clientes WHERE correoElectronico = ?', email, (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        return callback(null, rows.length > 0);
+    });
+};

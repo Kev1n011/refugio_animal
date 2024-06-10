@@ -13,38 +13,50 @@ router.post('/register', async (req, res) => {
     const {nombre, apellido_paterno, apellido_materno, telefono, email, password, colonia, calle, ciudad, cp, fecha_nacimiento } = req.body;
 
     try {
-        const hashedPassword = await bcrypt.hash(password, saltRounds); // Cifrar la contraseña
-
-        // Verificar que todos los campos estén presentes
-        
-
-        const nuevoUsuario = {
-            nombre: nombre,
-            apellido_paterno: apellido_paterno,
-            apellido_materno: apellido_materno,
-            telefono: telefono,
-            correoElectronico: email,
-            contrasena: hashedPassword, 
-            colonia: colonia,
-            calle: calle,
-            ciudad: ciudad,
-            cp: cp,
-            fechaRegistro: fecha_nacimiento
-        };
-
-        clientesModel.createUser(nuevoUsuario, (err, result) => {
+        // Verificar si el correo electrónico ya está registrado
+        clientesModel.findByEmail(email, async (err, emailExists) => {
             if (err) {
-                console.error('Error al crear el usuario:', err);
-                res.status(500).send('Error interno del servidor');
+                console.error('Error al verificar el correo electrónico:', err);
+                res.status(500).send('Error interno del servidor al verificar el correo electrónico');
                 return;
             }
-            res.redirect('/');
+            if (emailExists) {
+                res.status(409).send('Ya existe un usuario registrado con ese correo electrónico.');
+                return;
+            }
+
+            const hashedPassword = await bcrypt.hash(password, saltRounds); // Cifrar la contraseña
+
+            const nuevoUsuario = {
+                nombre: nombre,
+                apellido_paterno: apellido_paterno,
+                apellido_materno: apellido_materno,
+                telefono: telefono,
+                correoElectronico: email,
+                contrasena: hashedPassword, 
+                colonia: colonia,
+                calle: calle,
+                ciudad: ciudad,
+                cp: cp,
+                fechaRegistro: fecha_nacimiento
+            };
+
+            clientesModel.createUser(nuevoUsuario, (err, result) => {
+                if (err) {
+                    console.error('Error al crear el usuario:', err);
+                    res.status(500).send('Error interno del servidor');
+                    return;
+                }
+                res.redirect('/');
+            });
         });
     } catch (error) {
-        console.error('Error al cifrar la contraseña:', error);
+        console.error('Error al procesar la solicitud:', error);
         res.status(500).send('Error al procesar la solicitud');
     }
 });
+
+module.exports = router;
 
 router.post('/registro_empleado', async (req, res) => {
     const {nombre, telefono, email, password, colonia, ciudad, cp, fecha_nacimiento, sueldo } = req.body;
