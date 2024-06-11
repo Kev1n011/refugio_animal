@@ -1,0 +1,54 @@
+.cuadros-11212 {
+    width: 940px; /* Ancho fijo */
+    height: 230px; /* Alto fijo */
+    margin: 20px auto; /* Centra horizontalmente */
+    overflow: hidden; /* Asegúrate de que solo se vea una imagen a la vez */
+    position: relative;
+    margin-left: 260px;
+
+}
+
+
+
+/* Animaciones */
+.animate__animated {
+    animation-duration: 1s;
+}
+
+/* Estilo de la tarjeta */
+.wrapper-cuadros {
+    display: flex;
+    position: relative;
+    left: 600px;
+    top: 200px;
+    justify-content: space-around; /* Alinea los elementos horizontalmente */
+    align-items: center; /* Centra verticalmente los elementos */
+    
+}
+
+.cuadro-container {
+    width: 300px;
+    height: 300px; 
+    margin-bottom: 20px;
+    margin-right: 50px; 
+}
+
+.cuadro-container h3 {
+    color: black;
+}
+.cuadro-container p {
+    color:rgb(135, 135, 136);
+}
+
+.cuadro {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 100%;
+}
+
+/* Animaciones */
+.animate__animated {
+    animation-duration: 1s;
+}

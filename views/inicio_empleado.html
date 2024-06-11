@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Dashboard</title>
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="../diseno/css/inicio_usuario.css">
+    <link rel="stylesheet" href="../diseno/css/inicio_empleado.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+
+    <!-- CUSTOM JS -->
+    <script src="../diseno/menu_principal_usuario.js" defer></script>
+
+    <style>
+        font-face {
+            font-family: 'Montserrat';
+            src: url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+        }
+
+       
+    </style>
+
+</head>
+
+<body>
+   
+
+
+    <div class="wrapper">
+        
+        <div class="menu-dashboard closed">
+            <!-- TOP MENU -->
+            <div class="top-menu">
+                <div class="logo">
+                    <img src="../diseno/imagenLogo/logo.png" alt="Logo">
+                    <span>Refugio Animal</span>
+                </div>
+                <div class="toggle">
+                    <i class='bx bx-menu'></i>
+                </div>
+            </div>
+            
+            <!-- MENU -->
+         
+            <div class="menu">
+                <div class="enlace">
+
+                    <i class="bx bx-grid-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+
+
+
+                <div class="enlace">
+                    <a href="/reportes_empleado" style="color: inherit; text-decoration: none;">
+                        <i class='bx bxs-report' style='color:#ffffff'></i>
+                        <span>Ver reportes</span>
+
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <a href="/registro_empleado" style="color: inherit; text-decoration: none;">
+                        <i class='bx bxs-user'></i>
+                        <span>Agregar empleado</span>
+
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <a href="/logout" style="color: inherit; text-decoration: none;">
+                        <i class='bx bx-log-out' style='color:#ffffff'></i>
+                        <span>Cerrar sesión</span>
+                    </a>
+
+                </div>
+
+                <div class="enlace">
+                    <i class="bx bx-cog"></i>
+                    <span>Configuración</span>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="wrapper-cuadros">
+            <!-- ... -->
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 21px;">Total de Mascotas</h3>
+                    <p id="totalMascotas">Cargando...</p>
+                </div>
+            </div>
+        
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 20px;">Total de reportes de perdidas</h3>
+                    <p id="cantidadPerdidas">Cargando...</p>
+                </div>
+            </div>
+        
+            <div class="cuadro-container">
+                <div class="cuadro animate__animated animate__zoomIn">
+                    <h3 style="font-size: 20px;">Total de reportes de maltratos</h3>
+                    <p id="cantidadMaltratos">Cargando...</p>
+                </div>
+            </div>
+        </div>
+
+    
+
+   
+
+       
+
+     
+
+        
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+        const menuToggle = document.querySelector('.toggle');
+        const menuDashboard = document.querySelector('.menu-dashboard');
+
+        menuToggle.addEventListener('click', () => {
+            menuDashboard.classList.toggle('closed'); // Cambia la clase para mostrar/ocultar el menú
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          
+            obtenerTotalMascotas();
+            obtenerCantidadReportesMaltratos();
+            obtenerCantidadReportesPerdidas();
+        });
+        function obtenerTotalMascotas() {
+            // Hacer una solicitud al servidor para obtener el total de mascotas
+            // Aquí debes usar la ruta correcta para tu endpoint de mascotas
+            fetch('/api/v1/mascotas')
+                .then(response => response.json())
+                .then(data => {
+                    const total = data.datos.mascotas.length;
+                    document.getElementById('totalMascotas').textContent = total;
+                })
+                .catch(error => console.error('Error al obtener total de mascotas:', error));
+        }
+
+        function obtenerCantidadReportesPerdidas() {
+            // Hacer una solicitud al servidor para obtener la cantidad de reportes de pérdidas
+            // Aquí debes usar la ruta correcta para tu endpoint de reportes de pérdidas
+            fetch('/api/v1/reportePerdidas')
+                .then(response => response.json())
+                .then(data => {
+                    const cantidad = data.datos.reportes.length;
+                    document.getElementById('cantidadPerdidas').textContent = cantidad;
+                })
+                .catch(error => console.error('Error al obtener reportes de pérdidas:', error));
+        }
+
+function obtenerCantidadReportesMaltratos() {
+            // Hacer una solicitud al servidor para obtener la cantidad de reportes de maltratos
+            // Aquí debes usar la ruta correcta para tu endpoint de reportes de maltratos
+            fetch('/api/v1/reporteMaltratos')
+                .then(response => response.json())
+                .then(data => {
+                    const cantidad = data.datos.reportes.length;
+                    document.getElementById('cantidadMaltratos').textContent = cantidad;
+                })
+                .catch(error => console.error('Error al obtener reportes de maltratos:', error));
+        }
+
+    </script>
+
+</body>
+
+</html>

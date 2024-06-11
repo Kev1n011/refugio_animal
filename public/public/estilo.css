@@ -1,0 +1,41 @@
+body {
+  background-color: black;
+  color: white; /* Esto es opcional, pero es útil para asegurarse de que el texto sea legible */
+  font-family: Arial, sans-serif;
+}
+
+/*.contenedor{
+  width: 50%;
+  height: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contenedor img{
+  width: 38%;
+  height: 45%;
+}
+
+.formulario{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  height: 400px;
+}
+.formulario *{
+  margin-top: 20px;
+}
+.formulario input{
+  justify-content: center;
+  width: 100%;
+  border-color: black;
+}
+
+form{
+  width: 500px;
+  text-align: center;
+}*/
