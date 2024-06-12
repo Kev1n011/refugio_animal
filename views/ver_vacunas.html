@@ -66,16 +66,17 @@
     </div>
     <input type="hidden" id="correoUsuario" name="correo">
     <div class="container mt-5">
-        <h1 class="text-center">Reportes de adopciones</h1>
+        <h1 class="text-center">Reportes de vacunas</h1>
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <table class="table">                                                      <!-- id, nombreCliente, domicilioCliente, telefonoCliente, referencias, motivoAdopcion, fechaAdopcion, nombreMascota, id_mascota  -->>
+                <table class="table">                                                      
                     <thead>              
                         <tr>
                             <th scope="col">ID servicio</th>
                             <th scope="col">Nombre científico</th>
                             <th scope="col">Nombre común</th>
                             <th scope="col">Efectos secundarios</th>
+                            <th scope="col">Cantidad de dósis</th>
                             <th scope="col">Fecha de vacunación</th>
                             <th scope="col">ID mascota</th>
                             
@@ -128,6 +129,7 @@
                 row.innerHTML = `
             <td>${reporte.id}</td>
             <td>${reporte.nombreCientifico}</td>
+            <td>${reporte.nombreComun}</td>
             <td>${reporte.efectosSecundarios}</td>
             <td>${reporte.numeroDosis}</td>
             <td>${reporte.fechaVacunacion}</td>
