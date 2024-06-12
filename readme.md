@@ -1,8 +1,13 @@
 # Nombre del Proyecto
-## Descripción del Proyecto
+## Proyecto de Registro y Adopción de Animales
 
-Este proyecto consiste en el desarrollo de una aplicación móvil que sirve como guía para eventos locales, ofreciendo información detallada sobre conciertos, exposiciones, actividades culturales y más. Los usuarios pueden explorar opciones cercanas, registrarse, y participar en la comunidad mediante reseñas y calificaciones.
+# Integrantes
+## Avilés Parra Kevin Alberto
+## Parada Oliveros Luis Manuel
+
+# Descripción del proyecto
+Refugio canino y gatuno S.A de C.V es una organización sin fines de lucro enfocada en salvar, tratar y dar en adopción a distintas mascotas victimas de maltrato, abandono u otra situación similar con el objetivo de conseguirles una segunda familia. Actualmente el refugio lleva su flujo de trabajo a base de documentación escrita o física, por lo cual la implementación de un software que les auxilie en este trabajo resulta de vital importancia. Entre otros servicios que ofrece el refugio están las campañas de vacunación y castración, estética canina, auxilio de mascota perdida.
 
 ## Authors
-
-- [@aojedacs](https://www.github.com/aojedacs)
+- [@Kev1n011](https://github.com/kev1n011)
+- [@LuisOliveros11](https://github.com/LuisOliveros11)
