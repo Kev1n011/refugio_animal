@@ -132,7 +132,6 @@ router.post('/editarReporte', (req, res) => {
         descripcion
     };
 
-    // Asumiendo que `updateReport` es una función en tu modelo de base de datos que actualiza un reporte basado en su ID
     dbMaltratos.updateUser(id, reporteActualizado, (err, result) => {
         if (err) {
             console.error('Error al actualizar el reporte:', err);
@@ -145,7 +144,6 @@ router.post('/editarReporte', (req, res) => {
 router.post('/editarReportePerdida', (req, res) => {
     const { id, nombreMascota, estado, fecha, correo, descripcion, colonia, calle, ciudad, cp } = req.body;
 
-    // Asumiendo que tienes una función para actualizar los reportes en tu modelo de base de datos
     const reporteActualizado = {
         nombre_mascota: nombreMascota,
         estado,
@@ -158,7 +156,6 @@ router.post('/editarReportePerdida', (req, res) => {
         cp
     };
 
-    // Asumiendo que `updateReport` es una función en tu modelo de base de datos que actualiza un reporte basado en su ID
     dbPerdidas.updateUser(id, reporteActualizado, (err, result) => {
         if (err) {
             console.error('Error al actualizar el reporte:', err);

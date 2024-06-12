@@ -146,6 +146,15 @@ app.get('/reportes_empleado', (req, res) => {
 app.get('/registro_empleado', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'registro_empleado.html'));
 });
+app.get('/ver_adopciones', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'ver_adopciones.html'));
+});
+app.get('/ver_castraciones', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'ver_castraciones.html'));
+});
+app.get('/ver_vacunas', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'ver_vacunas.html'));
+});
 
 // Middleware para proteger rutas
 function ensureAuthenticated(req, res, next) {

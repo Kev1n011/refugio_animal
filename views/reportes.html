@@ -309,7 +309,7 @@
       reader.onload = function () {
         var output = document.getElementById('vistaPrevia');
         output.src = reader.result;
-        output.style.display = 'block'; // Asegúrate de que la imagen se muestre cuando se cargue
+        output.style.display = 'block'; 
       };
       reader.readAsDataURL(event.target.files[0]);
     }
